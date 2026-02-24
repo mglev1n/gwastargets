@@ -18,10 +18,12 @@ test_that("warns when trait_type='quantitative' and n_col=EffectiveN", {
   skip_if_not_installed("mockery")
 
   fake_df <- make_quant_sumstats_df(n = 10)
+  fake_df$EffectiveN <- 10000L  # needed so dplyr::select(N = EffectiveN) doesn't error
   mock_clean  <- mockery::mock(fake_df)
+  # Mock must return raw snp_match_munge column names (before the pipe rename)
   mock_munge  <- mockery::mock(
-    data.frame(SNP = paste0("rs", 1:5), N = 1000, Z = rnorm(5),
-               A1 = "A", A2 = "G", EAF = 0.3, stringsAsFactors = FALSE)
+    data.frame(rsid = paste0("rs", 1:5), N = 1000, beta = rnorm(5),
+               a1 = "A", a0 = "G", EAF = 0.3, stringsAsFactors = FALSE)
   )
   mock_ldsc <- mockery::mock(list(intercept = 0.98))
 
@@ -44,8 +46,8 @@ test_that("writes parquet with ldsc_adjustment=TRUE when intercept>1", {
   fake_df <- make_binary_sumstats_df(n = 10)
   mock_clean <- mockery::mock(fake_df)
   mock_munge <- mockery::mock(
-    data.frame(SNP = paste0("rs", 1:5), N = 1000, Z = rnorm(5),
-               A1 = "A", A2 = "G", EAF = 0.3, stringsAsFactors = FALSE)
+    data.frame(rsid = paste0("rs", 1:5), N = 1000, beta = rnorm(5),
+               a1 = "A", a0 = "G", EAF = 0.3, stringsAsFactors = FALSE)
   )
   mock_ldsc <- mockery::mock(list(intercept = 1.05))
 
@@ -72,8 +74,8 @@ test_that("writes parquet with ldsc_adjustment=FALSE when intercept<=1", {
   fake_df <- make_binary_sumstats_df(n = 10)
   mock_clean <- mockery::mock(fake_df)
   mock_munge <- mockery::mock(
-    data.frame(SNP = paste0("rs", 1:5), N = 1000, Z = rnorm(5),
-               A1 = "A", A2 = "G", EAF = 0.3, stringsAsFactors = FALSE)
+    data.frame(rsid = paste0("rs", 1:5), N = 1000, beta = rnorm(5),
+               a1 = "A", a0 = "G", EAF = 0.3, stringsAsFactors = FALSE)
   )
   mock_ldsc <- mockery::mock(list(intercept = 0.95))
 
