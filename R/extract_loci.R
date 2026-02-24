@@ -78,9 +78,9 @@ extract_loci <- function(df,
   na_chr <- sum(is.na(df[[chr_col_str]]))
   na_pos <- sum(is.na(df[[pos_col_str]]))
   na_p   <- sum(is.na(df[[p_col_str]]))
-  if (na_chr > 0) cli::cli_alert_warning("Found {.val {scales::comma(na_chr)}} rows with missing {.field {chr_col_str}}")
-  if (na_pos > 0) cli::cli_alert_warning("Found {.val {scales::comma(na_pos)}} rows with missing {.field {pos_col_str}}")
-  if (na_p   > 0) cli::cli_alert_warning("Found {.val {scales::comma(na_p)}} rows with missing {.field {p_col_str}}")
+  if (na_chr > 0) cli::cli_warn("Found {.val {scales::comma(na_chr)}} rows with missing {.field {chr_col_str}}")
+  if (na_pos > 0) cli::cli_warn("Found {.val {scales::comma(na_pos)}} rows with missing {.field {pos_col_str}}")
+  if (na_p   > 0) cli::cli_warn("Found {.val {scales::comma(na_p)}} rows with missing {.field {p_col_str}}")
 
   valid_p <- df[[p_col_str]][!is.na(df[[p_col_str]])]
   if (any(valid_p < 0 | valid_p > 1, na.rm = TRUE)) {

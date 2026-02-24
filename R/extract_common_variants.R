@@ -39,8 +39,6 @@
 #' @importFrom cli cli_alert_info
 #' @importFrom dplyr mutate filter group_by count select collect inner_join
 #' @importFrom rlang enquo as_name
-#' @importFrom tidytable mutate distinct group_by slice_sample ungroup
-#'   select inner_join
 #' @export
 extract_common_variants <- function(parquet_files,
                                     trait_type,

@@ -68,10 +68,9 @@ snp_match_munge <- function(sumstats, info_snp,
 
   bigassertr::message2("%s variants to be matched.", format(nrow(sumstats), big.mark = ","))
 
-  sumstats <- sumstats[vctrs::vec_in(
-    sumstats[, join_by[1:2]],
-    info_snp[, join_by[1:2]]
-  ), ]
+  # Pre-filter by rsid only so that reversed-allele variants (a0/a1 swapped)
+  # are not discarded before the reversal step below.
+  sumstats <- sumstats[sumstats[["rsid"]] %in% info_snp[["rsid"]], ]
   if (nrow(sumstats) == 0) bigassertr::stop2("No variant has been matched.")
 
   if (strand_flip) {
@@ -81,9 +80,10 @@ snp_match_munge <- function(sumstats, info_snp,
       format(sum(is_ambiguous), big.mark = ",")
     )
     sumstats2 <- sumstats[!is_ambiguous, ]
+    if (nrow(sumstats2) == 0) bigassertr::stop2("No non-ambiguous variants remain after removing ambiguous SNPs.")
     sumstats3 <- sumstats2
-    sumstats2$`_FLIP_` <- FALSE
-    sumstats3$`_FLIP_` <- TRUE
+    sumstats2$`_FLIP_` <- rep(FALSE, nrow(sumstats2))
+    sumstats3$`_FLIP_` <- rep(TRUE,  nrow(sumstats3))
     # bigsnpr:::flip_strand is an internal function used intentionally here;
     # this generates an R CMD CHECK NOTE which is acceptable.
     sumstats3$a0 <- bigsnpr:::flip_strand(sumstats2$a0)
@@ -91,7 +91,7 @@ snp_match_munge <- function(sumstats, info_snp,
     sumstats3 <- rbind(sumstats2, sumstats3)
   } else {
     sumstats3 <- sumstats
-    sumstats3$`_FLIP_` <- FALSE
+    sumstats3$`_FLIP_` <- rep(FALSE, nrow(sumstats3))
   }
 
   sumstats4          <- sumstats3

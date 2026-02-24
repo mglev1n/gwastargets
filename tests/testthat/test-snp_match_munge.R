@@ -28,11 +28,12 @@ test_that("matches variants on rsid+a0+a1", {
 })
 
 test_that("removes ambiguous SNPs when strand_flip = TRUE", {
+  # rs_amb: A/T is ambiguous; rs_ok: A/C is NOT ambiguous
   ss <- data.frame(
     chr  = c(1L, 1L),
     rsid = c("rs_amb", "rs_ok"),
-    a0   = c("A", "C"),    # A/T is ambiguous
-    a1   = c("T", "G"),
+    a0   = c("A", "A"),
+    a1   = c("T", "C"),
     beta = c(0.1, 0.2),
     N    = c(1000L, 1000L),
     EAF  = c(0.3, 0.4),
@@ -40,8 +41,8 @@ test_that("removes ambiguous SNPs when strand_flip = TRUE", {
   )
   info <- data.frame(
     rsid = c("rs_amb", "rs_ok"),
-    a0   = c("A", "C"),
-    a1   = c("T", "G"),
+    a0   = c("A", "A"),
+    a1   = c("T", "C"),
     stringsAsFactors = FALSE
   )
   result <- snp_match_munge(ss, info, strand_flip = TRUE, match.min.prop = 0)
@@ -80,8 +81,16 @@ test_that("errors when required columns missing from sumstats", {
 })
 
 test_that("errors when fewer than min_match variants matched", {
+  # sumstats has 4 variants (rs1-rs4); info_snp shares only rs1.
+  # min_match = 0.99 * min(4, 4) = 3.96; only 1 matches → error.
+  sparse_info <- data.frame(
+    rsid = c("rs1", "rs99", "rs98", "rs97"),
+    a0   = c("A",   "X",    "X",    "X"),
+    a1   = c("G",   "Y",    "Y",    "Y"),
+    stringsAsFactors = FALSE
+  )
   expect_error(
-    snp_match_munge(make_sumstats(), make_info_snp(),
+    snp_match_munge(make_sumstats(), sparse_info,
                     strand_flip = FALSE, match.min.prop = 0.99),
     "Not enough variants"
   )
