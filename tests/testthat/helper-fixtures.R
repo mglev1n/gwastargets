@@ -70,3 +70,17 @@ write_quant_parquet <- function(path, n = 50, chr = 1L) {
   arrow::write_parquet(df, path)
   invisible(path)
 }
+
+#' Make a minimal valid manifest data frame for generate_gwas_meta_pipeline tests.
+#' File paths are intentionally non-existent; wrap calls in suppressWarnings()
+#' or use withr::with_tempdir() + file.create() if testing file-existence warnings.
+make_manifest_df <- function() {
+  data.frame(
+    path     = c("/nonexistent/cohort1.txt.gz", "/nonexistent/cohort2.txt.gz"),
+    file     = c("cohort1.txt.gz",              "cohort2.txt.gz"),
+    cohort   = c("UKBB",                         "MVP"),
+    ancestry = c("EUR",                          "AFR"),
+    study    = c("UKBB_EUR",                     "MVP_AFR"),
+    stringsAsFactors = FALSE
+  )
+}
