@@ -4,7 +4,8 @@
 \alias{generate_gwas_meta_pipeline}
 \title{Generate targets pipeline code for GWAS meta-analysis}
 \usage{
-generate_gwas_meta_pipeline(trait, trait_type, n_col, output_base_dir = "Data")
+generate_gwas_meta_pipeline(trait, trait_type, n_col, manifest_df,
+  output_base_dir = "Data")
 }
 \arguments{
 \item{trait}{Trait name used in target names (e.g. \code{"CAD"}).}
@@ -13,6 +14,13 @@ generate_gwas_meta_pipeline(trait, trait_type, n_col, output_base_dir = "Data")
 
 \item{n_col}{Sample size column: \code{"EffectiveN"} for binary traits, \code{"N"}
 for quantitative traits (required, no default).}
+
+\item{manifest_df}{A data frame describing the cohort files to include.
+Required columns: \code{path} (full path to raw summary statistics file),
+\code{file} (basename of the file), \code{cohort} (cohort label), \code{ancestry}
+(ancestry label, e.g. \code{"EUR"}), \code{study} (unique identifier used as the
+\code{tar_map} target name -- must contain no spaces or special characters).
+Additional columns are preserved in the serialized output.}
 
 \item{output_base_dir}{Base output directory for intermediate files.
 Default \code{"Data"}.}
@@ -26,13 +34,24 @@ Generates a complete \code{targets} / \code{tarchetypes} pipeline as a character
 string, ready to be pasted into a \verb{_targets.R} file. The generated code
 covers per-cohort preparation, LDSC heritability estimation, per-ancestry
 and all-populations IVW meta-analysis, loci extraction, Manhattan plots,
-and MR-MEGA MDS. Validates \code{trait_type} and \code{n_col} before generating any
-code.
+and MR-MEGA MDS. Validates \code{trait_type}, \code{n_col}, and \code{manifest_df} before
+generating any code. The manifest is serialized as a \code{tibble::tribble()}
+call in the generated output so the pipeline is self-contained.
 }
 \details{
 Generate a targets GWAS meta-analysis pipeline
 }
 \examples{
-cat(generate_gwas_meta_pipeline("CAD", trait_type = "binary", n_col = "EffectiveN"))
-
+\dontrun{
+manifest <- data.frame(
+  path     = c("/data/UKBB_EUR.txt.gz", "/data/MVP_AFR.txt.gz"),
+  file     = c("UKBB_EUR.txt.gz",       "MVP_AFR.txt.gz"),
+  cohort   = c("UKBB",                  "MVP"),
+  ancestry = c("EUR",                   "AFR"),
+  study    = c("UKBB_EUR",              "MVP_AFR"),
+  stringsAsFactors = FALSE
+)
+cat(generate_gwas_meta_pipeline("CAD", trait_type = "binary",
+                                n_col = "EffectiveN", manifest_df = manifest))
+}
 }
