@@ -64,7 +64,7 @@ extract_common_variants <- function(parquet_files,
 
   ds <- ds_raw |>
     dplyr::mutate(
-      file     = arrow:::add_filename(),
+      file     = arrow::add_filename(),
       minor_af = pmin({{ eaf_col }}, 1 - {{ eaf_col }})
     ) |>
     dplyr::filter(minor_af > maf_threshold)

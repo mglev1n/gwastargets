@@ -35,7 +35,7 @@ generate_gwas_meta_pipeline <- function(trait,
   if (missing(trait_type) || !trait_type %in% c("binary", "quantitative")) {
     cli::cli_abort(c(
       "{.arg trait_type} must be {.val binary} or {.val quantitative}",
-      "i" = "No default is provided — this must be declared explicitly"
+      "i" = "No default is provided -- this must be declared explicitly"
     ))
   }
 
@@ -57,7 +57,7 @@ generate_gwas_meta_pipeline <- function(trait,
   if (trait_type == "quantitative" && n_col == "EffectiveN") {
     cli::cli_warn(c(
       "{.arg trait_type} = {.val quantitative} with {.arg n_col} = {.val EffectiveN}",
-      "i" = "This is unusual — did you mean {.arg trait_type} = {.val binary}?"
+      "i" = "This is unusual -- did you mean {.arg trait_type} = {.val binary}?"
     ))
   }
 

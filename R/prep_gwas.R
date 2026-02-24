@@ -5,7 +5,7 @@
 #' @description
 #' A high-level wrapper that runs the full per-cohort preparation pipeline:
 #' (1) cleans the raw file via [clean_gwas()], (2) validates trait-type columns
-#' via [assert_trait_columns()], (3) matches to HapMap3 SNPs via
+#' via `assert_trait_columns()`, (3) matches to HapMap3 SNPs via
 #' [snp_match_munge()], (4) estimates the LDSC intercept via
 #' [ldscr::ldsc_h2()], and (5) writes an `.parquet` file with LDSC-adjusted
 #' (or unadjusted) SE, Z, and P columns.
@@ -75,7 +75,7 @@ prep_gwas <- function(sumstats_file, hm3, ancestry, output_path,
   if (trait_type == "quantitative" && n_col_name == "EffectiveN") {
     cli::cli_warn(c(
       "{.arg trait_type} = {.val quantitative} with {.arg n_col} = {.val EffectiveN}",
-      "i" = "This is unusual — did you mean {.arg trait_type} = {.val binary}?"
+      "i" = "This is unusual -- did you mean {.arg trait_type} = {.val binary}?"
     ))
   }
 
@@ -103,7 +103,7 @@ prep_gwas <- function(sumstats_file, hm3, ancestry, output_path,
   ) |>
     dplyr::select(SNP = rsid, N, Z = beta, A1 = a1, A2 = a0, EAF)
 
-  # LDSC intercept correction — identical for binary and quantitative.
+  # LDSC intercept correction -- identical for binary and quantitative.
   # sample_prev / pop_prev default to NA in ldscr::ldsc_h2(), so
   # observed-scale h2 is computed for both trait types. The primary
   # purpose here is the intercept, not the h2 estimate itself.

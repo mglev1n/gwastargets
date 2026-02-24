@@ -55,7 +55,7 @@ meta_analyze_chromosome <- function(ds,
 
   by <- c(chr_col_name, pos_col_name, rsid_col_name, ea_col_name, oa_col_name)
 
-  # Columns to sum in the group_by step — differs by trait_type
+  # Columns to sum in the group_by step -- differs by trait_type
   if (trait_type == "binary") {
     n_cols_to_sum <- c(
       eaf_col_name,

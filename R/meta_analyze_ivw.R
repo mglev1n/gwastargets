@@ -5,7 +5,7 @@
 #' @description
 #' Performs a fixed-effects inverse-variance weighted (IVW) meta-analysis
 #' across multiple cohort parquet files. Processes each chromosome via
-#' [meta_analyze_chromosome()], applies a minor allele count (MAC) filter,
+#' `meta_analyze_chromosome()`, applies a minor allele count (MAC) filter,
 #' and returns heterogeneity statistics (Q, I2) alongside the weighted effect
 #' estimates.
 #'
