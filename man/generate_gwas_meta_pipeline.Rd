@@ -4,8 +4,13 @@
 \alias{generate_gwas_meta_pipeline}
 \title{Generate targets pipeline code for GWAS meta-analysis}
 \usage{
-generate_gwas_meta_pipeline(trait, trait_type, n_col, manifest_df,
-  output_base_dir = "Data")
+generate_gwas_meta_pipeline(
+  trait,
+  trait_type,
+  n_col,
+  manifest_df,
+  output_base_dir = "Data"
+)
 }
 \arguments{
 \item{trait}{Trait name used in target names (e.g. \code{"CAD"}).}
@@ -54,4 +59,5 @@ manifest <- data.frame(
 cat(generate_gwas_meta_pipeline("CAD", trait_type = "binary",
                                 n_col = "EffectiveN", manifest_df = manifest))
 }
+
 }
