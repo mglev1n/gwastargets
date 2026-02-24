@@ -33,7 +33,7 @@
 #' )
 #' }
 #'
-#' @importFrom arrow open_dataset schema add_filename
+#' @importFrom arrow open_dataset schema
 #' @importFrom dplyr mutate group_by summarize n n_distinct collect left_join
 #' @export
 summarize_sumstats <- function(parquet_files,
@@ -56,7 +56,7 @@ summarize_sumstats <- function(parquet_files,
   assert_trait_columns(names(arrow::schema(ds)), trait_type)
 
   ds <- ds |>
-    dplyr::mutate(file = arrow::add_filename()) |>
+    dplyr::mutate(file = arrow:::add_filename()) |>
     dplyr::mutate(minor_af = pmin({{ eaf_col }}, 1 - {{ eaf_col }}))
 
   # Columns summarised for all trait types

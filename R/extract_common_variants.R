@@ -35,7 +35,7 @@
 #' )
 #' }
 #'
-#' @importFrom arrow open_dataset schema add_filename
+#' @importFrom arrow open_dataset schema
 #' @importFrom cli cli_alert_info
 #' @importFrom dplyr mutate filter group_by count select collect inner_join
 #' @importFrom rlang enquo as_name
@@ -66,7 +66,7 @@ extract_common_variants <- function(parquet_files,
 
   ds <- ds_raw |>
     dplyr::mutate(
-      file     = arrow::add_filename(),
+      file     = arrow:::add_filename(),
       minor_af = pmin({{ eaf_col }}, 1 - {{ eaf_col }})
     ) |>
     dplyr::filter(minor_af > maf_threshold)

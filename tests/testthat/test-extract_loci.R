@@ -59,3 +59,4 @@ test_that("calls gwasRtools functions and returns annotated tibble on success", 
   expect_s3_class(result, "tbl_df")
   expect_true("nearest_gene" %in% names(result))
 })
+

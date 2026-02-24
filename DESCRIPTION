@@ -39,7 +39,7 @@ Suggests:
     testthat (>= 3.0.0),
     withr
 Remotes:
-    hakyimlab/tidyGWAS,
-    GenomicSEM/ldscr,
-    mglev/gwasRtools,
-    mglev/levinmisc
+    Ararder/tidyGWAS,
+    lcpilling/gwasRtools,
+    mglev1n/ldscr,
+    mglev1n/levinmisc

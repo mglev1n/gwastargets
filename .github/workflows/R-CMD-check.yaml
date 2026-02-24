@@ -34,10 +34,10 @@ jobs:
 
       - name: Install GitHub-only packages
         run: |
-          remotes::install_github("hakyimlab/tidyGWAS", upgrade = "never")
-          remotes::install_github("GenomicSEM/ldscr", upgrade = "never")
-          remotes::install_github("mglev/gwasRtools", upgrade = "never")
-          remotes::install_github("mglev/levinmisc", upgrade = "never")
+          remotes::install_github("Ararder/tidyGWAS", upgrade = "never")
+          remotes::install_github("mglev1n/ldscr", upgrade = "never")
+          remotes::install_github("lcpilling/gwasRtools", upgrade = "never")
+          remotes::install_github("mglev1n/levinmisc", upgrade = "never")
         shell: Rscript {0}
 
       - uses: r-lib/actions/check-r-package@v2

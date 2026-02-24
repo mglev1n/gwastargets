@@ -164,7 +164,7 @@ meta_analyze_chromosome <- function(ds,
   meta_results <- meta_results |> dplyr::arrange(p_value)
 
   if (nrow(meta_results) == 0) {
-    cli::cli_alert_warning("No variants remaining for chromosome {chr}")
+    cli::cli_warn("No variants remaining for chromosome {chr}")
   }
 
   return(meta_results)
