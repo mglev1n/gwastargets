@@ -1,0 +1,58 @@
+url: https://mglev1n.github.io/gwastargets/
+
+template:
+  bootstrap: 5
+
+home:
+  title: "gwastargets: GWAS Meta-Analysis Pipeline Functions"
+  description: >
+    Functions for building reproducible multi-cohort GWAS meta-analysis
+    pipelines using the targets framework. Supports binary and quantitative
+    traits with LDSC intercept correction, IVW meta-analysis, loci extraction,
+    and MR-MEGA MDS.
+
+navbar:
+  structure:
+    left:  [intro, reference, articles]
+    right: [search, github]
+  components:
+    github:
+      icon: fab fa-github
+      href: https://github.com/mglev1n/gwastargets
+
+articles:
+  - title: "Getting started"
+    navbar: ~
+    contents:
+      - gwastargets
+
+reference:
+  - title: "Pipeline generation"
+    desc: "Generate a complete `targets` pipeline from a cohort manifest."
+    contents:
+      - generate_gwas_meta_pipeline
+
+  - title: "Per-cohort preparation"
+    desc: "Clean, harmonize, and QC individual cohort summary statistics."
+    contents:
+      - prep_gwas
+      - clean_gwas
+      - harmonize_sumstats_headers
+      - snp_match_munge
+
+  - title: "Quality control"
+    desc: "Summarize per-cohort statistics before meta-analysis."
+    contents:
+      - summarize_sumstats
+
+  - title: "Meta-analysis"
+    desc: "Fixed-effects IVW meta-analysis across cohorts."
+    contents:
+      - meta_analyze_ivw
+
+  - title: "Downstream analysis"
+    desc: "Loci extraction, common variant identification, and MR-MEGA MDS."
+    contents:
+      - extract_loci
+      - extract_common_variants
+      - calculate_mr_mega_mds

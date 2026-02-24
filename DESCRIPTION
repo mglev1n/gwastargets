@@ -35,9 +35,12 @@ Imports:
     tidyGWAS,
     vctrs
 Suggests:
+    knitr,
     mockery,
+    rmarkdown,
     testthat (>= 3.0.0),
     withr
+VignetteBuilder: knitr
 Remotes:
     Ararder/tidyGWAS,
     lcpilling/gwasRtools,
