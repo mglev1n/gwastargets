@@ -7,6 +7,8 @@ Description: Functions for multi-cohort GWAS meta-analysis supporting binary
     and quantitative traits. Provides harmonization, QC cleaning, allele
     matching, LDSC intercept correction, IVW meta-analysis, loci extraction,
     and targets pipeline code generation.
+URL: https://mglev1n.github.io/gwastargets/, https://github.com/mglev1n/gwastargets
+BugReports: https://github.com/mglev1n/gwastargets/issues
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
