@@ -68,7 +68,7 @@ Binary traits additionally include \code{CaseN} and \code{ControlN}.
 \description{
 Performs a fixed-effects inverse-variance weighted (IVW) meta-analysis
 across multiple cohort parquet files. Processes each chromosome via
-\code{\link[=meta_analyze_chromosome]{meta_analyze_chromosome()}}, applies a minor allele count (MAC) filter,
+\code{meta_analyze_chromosome()}, applies a minor allele count (MAC) filter,
 and returns heterogeneity statistics (Q, I2) alongside the weighted effect
 estimates.
 }

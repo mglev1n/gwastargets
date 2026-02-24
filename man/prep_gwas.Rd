@@ -45,7 +45,7 @@ The file path of the written parquet file (invisibly).
 \description{
 A high-level wrapper that runs the full per-cohort preparation pipeline:
 (1) cleans the raw file via \code{\link[=clean_gwas]{clean_gwas()}}, (2) validates trait-type columns
-via \code{\link[=assert_trait_columns]{assert_trait_columns()}}, (3) matches to HapMap3 SNPs via
+via \code{assert_trait_columns()}, (3) matches to HapMap3 SNPs via
 \code{\link[=snp_match_munge]{snp_match_munge()}}, (4) estimates the LDSC intercept via
 \code{\link[ldscr:ldsc_h2]{ldscr::ldsc_h2()}}, and (5) writes an \code{.parquet} file with LDSC-adjusted
 (or unadjusted) SE, Z, and P columns.
