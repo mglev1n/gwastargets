@@ -44,9 +44,12 @@ generate_gwas_meta_pipeline(
   A data frame describing the cohort files to include. Required columns:
   `path` (full path to raw summary statistics file), `file` (basename of
   the file), `cohort` (cohort label), `ancestry` (ancestry label, e.g.
-  `"EUR"`), `study` (unique identifier used as the `tar_map` target name
-  – must contain no spaces or special characters). Additional columns
-  are preserved in the serialized output.
+  `"EUR"`), `study` (unique human-readable identifier; must contain no
+  spaces or special characters; does not need to include the ancestry).
+  A `tar_name` column (`{study}_{ancestry}`) is automatically added and
+  used as the `tar_map` target name so that ancestry-based target
+  selectors work reliably. Additional columns are preserved in the
+  serialized output.
 
 - hm3_path:
 

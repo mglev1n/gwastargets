@@ -19,7 +19,7 @@ call in the generated output so the pipeline is self-contained."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">gwastargets</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -89,9 +89,12 @@ for quantitative traits (required, no default).</p></dd>
 <dd><p>A data frame describing the cohort files to include.
 Required columns: <code>path</code> (full path to raw summary statistics file),
 <code>file</code> (basename of the file), <code>cohort</code> (cohort label), <code>ancestry</code>
-(ancestry label, e.g. <code>"EUR"</code>), <code>study</code> (unique identifier used as the
-<code>tar_map</code> target name – must contain no spaces or special characters).
-Additional columns are preserved in the serialized output.</p></dd>
+(ancestry label, e.g. <code>"EUR"</code>), <code>study</code> (unique human-readable identifier;
+must contain no spaces or special characters; does not need to include the
+ancestry). A <code>tar_name</code> column (<code>{study}_{ancestry}</code>) is automatically
+added and used as the <code>tar_map</code> target name so that ancestry-based target
+selectors work reliably. Additional columns are preserved in the serialized
+output.</p></dd>
 
 
 <dt id="arg-hm-path">hm3_path<a class="anchor" aria-label="anchor" href="#arg-hm-path"></a></dt>
