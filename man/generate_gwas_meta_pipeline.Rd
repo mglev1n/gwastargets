@@ -25,9 +25,12 @@ for quantitative traits (required, no default).}
 \item{manifest_df}{A data frame describing the cohort files to include.
 Required columns: \code{path} (full path to raw summary statistics file),
 \code{file} (basename of the file), \code{cohort} (cohort label), \code{ancestry}
-(ancestry label, e.g. \code{"EUR"}), \code{study} (unique identifier used as the
-\code{tar_map} target name -- must contain no spaces or special characters).
-Additional columns are preserved in the serialized output.}
+(ancestry label, e.g. \code{"EUR"}), \code{study} (unique human-readable identifier;
+must contain no spaces or special characters; does not need to include the
+ancestry). A \code{tar_name} column (\verb{\{study\}_\{ancestry\}}) is automatically
+added and used as the \code{tar_map} target name so that ancestry-based target
+selectors work reliably. Additional columns are preserved in the serialized
+output.}
 
 \item{hm3_path}{Path to the LDSC HapMap3 SNP list file (e.g.
 \code{w_hm3.snplist}). Required.}

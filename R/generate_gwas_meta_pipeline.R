@@ -123,7 +123,7 @@ generate_gwas_meta_pipeline <- function(trait,
   if (length(bad_ancestries) > 0) {
     cli::cli_abort(c(
       "{.arg manifest_df} contains unsupported {.field ancestry} value{?s}: {.val {bad_ancestries}}",
-      "i" = "Valid ancestries (ldscr UKB LD scores): {.val {.VALID_ANCESTRIES}}"
+      "i" = "Valid ancestries (ldscr UKB LD scores): {.val {(.VALID_ANCESTRIES)}}"
     ))
   }
 
