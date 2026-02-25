@@ -9,6 +9,8 @@ generate_gwas_meta_pipeline(
   trait_type,
   n_col,
   manifest_df,
+  hm3_path,
+  crew_controller = NULL,
   output_base_dir = "Data"
 )
 }
@@ -26,6 +28,13 @@ Required columns: \code{path} (full path to raw summary statistics file),
 (ancestry label, e.g. \code{"EUR"}), \code{study} (unique identifier used as the
 \code{tar_map} target name -- must contain no spaces or special characters).
 Additional columns are preserved in the serialized output.}
+
+\item{hm3_path}{Path to the LDSC HapMap3 SNP list file (e.g.
+\code{w_hm3.snplist}). Required.}
+
+\item{crew_controller}{Name of the \code{crew} controller to use for
+resource-intensive targets (\code{meta_ALL} and \code{meta_common_variants_ALL}).
+If \code{NULL} (default), no \code{resources} block is added to those targets.}
 
 \item{output_base_dir}{Base output directory for intermediate files.
 Default \code{"Data"}.}
@@ -57,7 +66,8 @@ manifest <- data.frame(
   stringsAsFactors = FALSE
 )
 cat(generate_gwas_meta_pipeline("CAD", trait_type = "binary",
-                                n_col = "EffectiveN", manifest_df = manifest))
+                                n_col = "EffectiveN", manifest_df = manifest,
+                                hm3_path = "/path/to/w_hm3.snplist"))
 }
 
 }
