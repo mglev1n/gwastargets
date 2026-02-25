@@ -39,7 +39,7 @@ test_that("quantitative: output contains n_total but NOT n_cases", {
   expect_false(grepl("n_cases", result))
 })
 
-test_that("generated code contains tribble with study values from manifest", {
+test_that("generated code contains tribble with study and tar_name columns", {
   mdf <- make_manifest_df()
   result <- suppressWarnings(
     generate_gwas_meta_pipeline("CAD", trait_type = "binary",
@@ -47,10 +47,15 @@ test_that("generated code contains tribble with study values from manifest", {
                                 hm3_path = "/nonexistent/w_hm3.snplist")
   )
   expect_true(grepl("tibble::tribble", result))
-  expect_true(grepl("UKBB_EUR", result))
-  expect_true(grepl("MVP_AFR",  result))
-  expect_true(grepl("~path",    result))
-  expect_true(grepl("~study",   result))
+  expect_true(grepl("~path",     result))
+  expect_true(grepl("~study",    result))
+  expect_true(grepl("~tar_name", result))
+  # study values appear as-is
+  expect_true(grepl('"UKBB"', result, fixed = TRUE))
+  expect_true(grepl('"MVP"',  result, fixed = TRUE))
+  # tar_name values are study_ancestry
+  expect_true(grepl('"UKBB_EUR"', result, fixed = TRUE))
+  expect_true(grepl('"MVP_AFR"',  result, fixed = TRUE))
 })
 
 test_that("generated code contains manifest variable assigned with trait prefix", {
@@ -163,12 +168,32 @@ test_that("errors when manifest_df is missing required columns", {
 
 test_that("errors when manifest_df has duplicate study values", {
   dup_manifest <- make_manifest_df()
-  dup_manifest$study <- c("UKBB_EUR", "UKBB_EUR")  # duplicate
+  dup_manifest$study <- c("UKBB", "UKBB")  # duplicate
   expect_error(
     generate_gwas_meta_pipeline("CAD", trait_type = "binary", n_col = "EffectiveN",
                                 manifest_df = dup_manifest),
     "duplicate"
   )
+})
+
+test_that("errors when ancestry values are not in the valid set", {
+  bad_manifest <- make_manifest_df()
+  bad_manifest$ancestry[1] <- "SAS"
+  expect_error(
+    generate_gwas_meta_pipeline("CAD", trait_type = "binary", n_col = "EffectiveN",
+                                manifest_df = bad_manifest),
+    "unsupported"
+  )
+})
+
+test_that("generated code uses names = tar_name in tar_map", {
+  result <- suppressWarnings(
+    generate_gwas_meta_pipeline("CAD", trait_type = "binary",
+                                n_col = "EffectiveN", manifest_df = make_manifest_df(),
+                                hm3_path = "/nonexistent/w_hm3.snplist")
+  )
+  expect_true(grepl("names  = tar_name", result, fixed = TRUE))
+  expect_false(grepl("names  = study",   result, fixed = TRUE))
 })
 
 test_that("warns when manifest_df paths do not exist", {
