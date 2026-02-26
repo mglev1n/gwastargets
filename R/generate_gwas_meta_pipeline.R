@@ -52,7 +52,8 @@
 #' )
 #' cat(generate_gwas_meta_pipeline("CAD", trait_type = "binary",
 #'                                 n_col = "EffectiveN", manifest_df = manifest,
-#'                                 hm3_path = "/path/to/w_hm3.snplist"))
+#'                                 hm3_path   = "/path/to/w_hm3.snplist",
+#'                                 dbsnp_path = "/path/to/dbSNP155"))
 #' }
 #'
 #' @importFrom cli cli_abort cli_warn
