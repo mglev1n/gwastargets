@@ -82,6 +82,32 @@ interactive use outside of <code>targets</code>.</p>
 <hr>
 </div>
 <div class="section level2">
+<h2 id="required-ancillary-files">Required ancillary files<a class="anchor" aria-label="anchor" href="#required-ancillary-files"></a>
+</h2>
+<p>Two reference files must be provided before generating a
+pipeline:</p>
+<div class="section level3">
+<h3 id="hapmap-3-snp-list-hm3_path">HapMap 3 SNP list (<code>hm3_path</code>)<a class="anchor" aria-label="anchor" href="#hapmap-3-snp-list-hm3_path"></a>
+</h3>
+<p>Used by <code><a href="../reference/prep_gwas.html">prep_gwas()</a></code> to match variants and by LDSC for
+heritability and genetic correlation estimation. The file is loaded via
+<code><a href="https://vroom.tidyverse.org/reference/vroom.html" class="external-link">vroom::vroom()</a></code> and should have columns <code>SNP</code>,
+<code>A1</code>, <code>A2</code>. The standard LDSC HapMap 3 SNP list
+(<code>w_hm3.snplist</code>) is available from the <a href="https://alkesgroup.broadinstitute.org/LDSCORE/" class="external-link">Alkes Group
+LDSCORE repository</a>.</p>
+</div>
+<div class="section level3">
+<h3 id="dbsnp155-reference-dbsnp_path">dbSNP155 reference (<code>dbsnp_path</code>)<a class="anchor" aria-label="anchor" href="#dbsnp155-reference-dbsnp_path"></a>
+</h3>
+<p>Used by <code><a href="../reference/clean_gwas.html">clean_gwas()</a></code> (via <code>tidyGWAS</code>) for
+variant QC and rsID harmonization. This should be the path to a local
+dbSNP155 directory. See the <a href="https://github.com/Ararder/tidyGWAS" class="external-link"><code>tidyGWAS</code>
+documentation</a> for instructions on downloading and preparing this
+reference.</p>
+<hr>
+</div>
+</div>
+<div class="section level2">
 <h2 id="step-1-build-a-cohort-manifest">Step 1: Build a cohort manifest<a class="anchor" aria-label="anchor" href="#step-1-build-a-cohort-manifest"></a>
 </h2>
 <p>The manifest is a data frame with one row per cohort × ancestry
@@ -146,9 +172,11 @@ missing or <code>study</code> values are duplicated, and warn if any
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">code</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/generate_gwas_meta_pipeline.html">generate_gwas_meta_pipeline</a></span><span class="op">(</span></span>
 <span>  trait       <span class="op">=</span> <span class="st">"CAD"</span>,</span>
-<span>  trait_type  <span class="op">=</span> <span class="st">"binary"</span>,   <span class="co"># or "quantitative"</span></span>
+<span>  trait_type  <span class="op">=</span> <span class="st">"binary"</span>,      <span class="co"># or "quantitative"</span></span>
 <span>  n_col       <span class="op">=</span> <span class="st">"EffectiveN"</span>,  <span class="co"># use "N" for quantitative traits</span></span>
-<span>  manifest_df <span class="op">=</span> <span class="va">manifest</span></span>
+<span>  manifest_df <span class="op">=</span> <span class="va">manifest</span>,</span>
+<span>  hm3_path    <span class="op">=</span> <span class="st">"/path/to/w_hm3.snplist"</span>,</span>
+<span>  dbsnp_path  <span class="op">=</span> <span class="st">"/path/to/dbSNP155"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Review the generated code</span></span>
@@ -198,11 +226,12 @@ standardized columns including <code>SE_ldsc_adjusted</code>
 <code class="sourceCode R"><span><span class="co"># Typically called inside a targets pipeline, but works interactively too</span></span>
 <span><span class="va">out_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/prep_gwas.html">prep_gwas</a></span><span class="op">(</span></span>
 <span>  sumstats_file <span class="op">=</span> <span class="st">"/project/data/UKBB_EUR.txt.gz"</span>,</span>
-<span>  hm3           <span class="op">=</span> <span class="va">hm3_snps</span>,         <span class="co"># data frame with SNP, A1, A2</span></span>
+<span>  hm3           <span class="op">=</span> <span class="va">hm3_snps</span>,              <span class="co"># data frame with SNP, A1, A2</span></span>
 <span>  ancestry      <span class="op">=</span> <span class="st">"EUR"</span>,</span>
 <span>  output_path   <span class="op">=</span> <span class="st">"Data/CAD/prepped_sumstats"</span>,</span>
 <span>  trait_type    <span class="op">=</span> <span class="st">"binary"</span>,</span>
-<span>  n_col         <span class="op">=</span> <span class="va">EffectiveN</span>         <span class="co"># bare name, not quoted</span></span>
+<span>  n_col         <span class="op">=</span> <span class="va">EffectiveN</span>,            <span class="co"># bare name, not quoted</span></span>
+<span>  dbsnp_path    <span class="op">=</span> <span class="st">"/path/to/dbSNP155"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p>The output parquet file contains the original cleaned columns
 plus:</p>

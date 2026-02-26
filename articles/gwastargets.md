@@ -23,6 +23,32 @@ etc.) are also available for interactive use outside of `targets`.
 
 ------------------------------------------------------------------------
 
+## Required ancillary files
+
+Two reference files must be provided before generating a pipeline:
+
+### HapMap 3 SNP list (`hm3_path`)
+
+Used by
+[`prep_gwas()`](https://mglev1n.github.io/gwastargets/reference/prep_gwas.md)
+to match variants and by LDSC for heritability and genetic correlation
+estimation. The file is loaded via
+[`vroom::vroom()`](https://vroom.tidyverse.org/reference/vroom.html) and
+should have columns `SNP`, `A1`, `A2`. The standard LDSC HapMap 3 SNP
+list (`w_hm3.snplist`) is available from the [Alkes Group LDSCORE
+repository](https://alkesgroup.broadinstitute.org/LDSCORE/).
+
+### dbSNP155 reference (`dbsnp_path`)
+
+Used by
+[`clean_gwas()`](https://mglev1n.github.io/gwastargets/reference/clean_gwas.md)
+(via `tidyGWAS`) for variant QC and rsID harmonization. This should be
+the path to a local dbSNP155 directory. See the [`tidyGWAS`
+documentation](https://github.com/Ararder/tidyGWAS) for instructions on
+downloading and preparing this reference.
+
+------------------------------------------------------------------------
+
 ## Step 1: Build a cohort manifest
 
 The manifest is a data frame with one row per cohort × ancestry
@@ -65,9 +91,11 @@ if any `path` files do not exist on disk.
 ``` r
 code <- generate_gwas_meta_pipeline(
   trait       = "CAD",
-  trait_type  = "binary",   # or "quantitative"
+  trait_type  = "binary",      # or "quantitative"
   n_col       = "EffectiveN",  # use "N" for quantitative traits
-  manifest_df = manifest
+  manifest_df = manifest,
+  hm3_path    = "/path/to/w_hm3.snplist",
+  dbsnp_path  = "/path/to/dbSNP155"
 )
 
 # Review the generated code
@@ -112,11 +140,12 @@ which:
 # Typically called inside a targets pipeline, but works interactively too
 out_path <- prep_gwas(
   sumstats_file = "/project/data/UKBB_EUR.txt.gz",
-  hm3           = hm3_snps,         # data frame with SNP, A1, A2
+  hm3           = hm3_snps,              # data frame with SNP, A1, A2
   ancestry      = "EUR",
   output_path   = "Data/CAD/prepped_sumstats",
   trait_type    = "binary",
-  n_col         = EffectiveN         # bare name, not quoted
+  n_col         = EffectiveN,            # bare name, not quoted
+  dbsnp_path    = "/path/to/dbSNP155"
 )
 ```
 
