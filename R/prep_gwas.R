@@ -118,6 +118,10 @@ prep_gwas <- function(sumstats_file, hm3, ancestry, output_path,
     ext = "parquet"
   )
 
+  if (trait_type == "quantitative") {
+    gwas_cleaned <- gwas_cleaned |> dplyr::mutate(EffectiveN = N)
+  }
+
   if (gwas_ldsc_res$intercept > 1) {
     cli::cli_alert_info("LDSC intercept > 1: Adjusting SE, Z, and P-values")
     gwas_cleaned |>

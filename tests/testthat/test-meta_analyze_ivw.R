@@ -47,7 +47,7 @@ test_that("binary: output has CaseN, ControlN, EffectiveN columns", {
   expect_true("EffectiveN" %in% names(result))
 })
 
-test_that("quantitative: output does NOT have CaseN, ControlN", {
+test_that("quantitative: output does NOT have CaseN, ControlN but has EffectiveN", {
   tmp1 <- withr::local_tempfile(fileext = ".parquet")
   tmp2 <- withr::local_tempfile(fileext = ".parquet")
   arrow::write_parquet(make_meta_quant_df(60, 1L), tmp1)
@@ -57,6 +57,7 @@ test_that("quantitative: output does NOT have CaseN, ControlN", {
                              chromosomes = 1L, min_mac = 10)
   expect_false("CaseN" %in% names(result))
   expect_false("ControlN" %in% names(result))
+  expect_true("EffectiveN" %in% names(result))
 })
 
 test_that("all p-values in [0, 1]", {

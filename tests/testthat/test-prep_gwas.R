@@ -40,6 +40,35 @@ test_that("warns when trait_type='quantitative' and n_col=EffectiveN", {
   )
 })
 
+test_that("quantitative: EffectiveN = N is added to parquet output", {
+  skip_if_not_installed("mockery")
+
+  fake_df <- make_quant_sumstats_df(n = 10)  # no EffectiveN column
+  mock_clean <- mockery::mock(fake_df)
+  mock_munge <- mockery::mock(
+    data.frame(rsid = paste0("rs", 1:5), N = 1000, beta = rnorm(5),
+               a1 = "A", a0 = "G", EAF = 0.3, stringsAsFactors = FALSE)
+  )
+  mock_ldsc <- mockery::mock(list(intercept = 0.95))
+
+  written_data <- NULL
+  mock_write <- function(x, ...) { written_data <<- x; invisible(NULL) }
+
+  mockery::stub(prep_gwas, "clean_gwas", mock_clean)
+  mockery::stub(prep_gwas, "snp_match_munge", mock_munge)
+  mockery::stub(prep_gwas, "ldscr::ldsc_h2", mock_ldsc)
+  mockery::stub(prep_gwas, "arrow::write_parquet", mock_write)
+
+  withr::with_tempdir({
+    prep_gwas("cohort.txt.gz",
+              hm3 = data.frame(SNP = "rs1", A1 = "A", A2 = "G"),
+              ancestry = "EUR", output_path = ".",
+              trait_type = "quantitative", n_col = N)
+    expect_true("EffectiveN" %in% names(written_data))
+    expect_equal(written_data$EffectiveN, written_data$N)
+  })
+})
+
 test_that("writes parquet with ldsc_adjustment=TRUE when intercept>1", {
   skip_if_not_installed("mockery")
 
