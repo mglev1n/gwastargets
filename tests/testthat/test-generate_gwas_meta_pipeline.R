@@ -2,7 +2,8 @@ test_that("returns a character string", {
   result <- suppressWarnings(
     generate_gwas_meta_pipeline("CAD", trait_type = "binary",
                                 n_col = "EffectiveN", manifest_df = make_manifest_df(),
-                                hm3_path = "/nonexistent/w_hm3.snplist")
+                                hm3_path = "/nonexistent/w_hm3.snplist",
+                                dbsnp_path = "/nonexistent/dbSNP155")
   )
   expect_type(result, "character")
   expect_length(result, 1)
@@ -12,7 +13,8 @@ test_that("contains trait name in uppercase and lowercase", {
   result <- suppressWarnings(
     generate_gwas_meta_pipeline("BMI", trait_type = "quantitative",
                                 n_col = "N", manifest_df = make_manifest_df(),
-                                hm3_path = "/nonexistent/w_hm3.snplist")
+                                hm3_path = "/nonexistent/w_hm3.snplist",
+                                dbsnp_path = "/nonexistent/dbSNP155")
   )
   expect_true(grepl("BMI", result))
   expect_true(grepl("bmi", result))
@@ -22,7 +24,8 @@ test_that("binary: output contains EffectiveN, n_cases, n_controls", {
   result <- suppressWarnings(
     generate_gwas_meta_pipeline("T2D", trait_type = "binary",
                                 n_col = "EffectiveN", manifest_df = make_manifest_df(),
-                                hm3_path = "/nonexistent/w_hm3.snplist")
+                                hm3_path = "/nonexistent/w_hm3.snplist",
+                                dbsnp_path = "/nonexistent/dbSNP155")
   )
   expect_true(grepl("EffectiveN", result))
   expect_true(grepl("n_cases",   result))
@@ -33,7 +36,8 @@ test_that("quantitative: output contains n_total but NOT n_cases", {
   result <- suppressWarnings(
     generate_gwas_meta_pipeline("HDL", trait_type = "quantitative",
                                 n_col = "N", manifest_df = make_manifest_df(),
-                                hm3_path = "/nonexistent/w_hm3.snplist")
+                                hm3_path = "/nonexistent/w_hm3.snplist",
+                                dbsnp_path = "/nonexistent/dbSNP155")
   )
   expect_true(grepl("n_total",  result))
   expect_false(grepl("n_cases", result))
@@ -44,7 +48,8 @@ test_that("generated code contains tribble with study and tar_name columns", {
   result <- suppressWarnings(
     generate_gwas_meta_pipeline("CAD", trait_type = "binary",
                                 n_col = "EffectiveN", manifest_df = mdf,
-                                hm3_path = "/nonexistent/w_hm3.snplist")
+                                hm3_path = "/nonexistent/w_hm3.snplist",
+                                dbsnp_path = "/nonexistent/dbSNP155")
   )
   expect_true(grepl("tibble::tribble", result))
   expect_true(grepl("~path",     result))
@@ -62,7 +67,8 @@ test_that("generated code contains manifest variable assigned with trait prefix"
   result <- suppressWarnings(
     generate_gwas_meta_pipeline("CAD", trait_type = "binary",
                                 n_col = "EffectiveN", manifest_df = make_manifest_df(),
-                                hm3_path = "/nonexistent/w_hm3.snplist")
+                                hm3_path = "/nonexistent/w_hm3.snplist",
+                                dbsnp_path = "/nonexistent/dbSNP155")
   )
   expect_true(grepl("cad_manifest_df <- tibble::tribble", result))
 })
@@ -71,9 +77,20 @@ test_that("generated code embeds hm3_path in tar_file_read call", {
   result <- suppressWarnings(
     generate_gwas_meta_pipeline("CAD", trait_type = "binary",
                                 n_col = "EffectiveN", manifest_df = make_manifest_df(),
-                                hm3_path = "/my/custom/w_hm3.snplist")
+                                hm3_path = "/my/custom/w_hm3.snplist",
+                                dbsnp_path = "/nonexistent/dbSNP155")
   )
   expect_true(grepl("/my/custom/w_hm3.snplist", result, fixed = TRUE))
+})
+
+test_that("generated code embeds dbsnp_path in prep_gwas call", {
+  result <- suppressWarnings(
+    generate_gwas_meta_pipeline("CAD", trait_type = "binary",
+                                n_col = "EffectiveN", manifest_df = make_manifest_df(),
+                                hm3_path = "/nonexistent/w_hm3.snplist",
+                                dbsnp_path = "/my/custom/dbSNP155")
+  )
+  expect_true(grepl("/my/custom/dbSNP155", result, fixed = TRUE))
 })
 
 test_that("crew_controller = NULL produces no resources block", {
@@ -81,6 +98,7 @@ test_that("crew_controller = NULL produces no resources block", {
     generate_gwas_meta_pipeline("CAD", trait_type = "binary",
                                 n_col = "EffectiveN", manifest_df = make_manifest_df(),
                                 hm3_path = "/nonexistent/w_hm3.snplist",
+                                dbsnp_path = "/nonexistent/dbSNP155",
                                 crew_controller = NULL)
   )
   expect_false(grepl("tar_resources_crew", result))
@@ -91,6 +109,7 @@ test_that("crew_controller embeds controller name in resources blocks", {
     generate_gwas_meta_pipeline("CAD", trait_type = "binary",
                                 n_col = "EffectiveN", manifest_df = make_manifest_df(),
                                 hm3_path = "/nonexistent/w_hm3.snplist",
+                                dbsnp_path = "/nonexistent/dbSNP155",
                                 crew_controller = "my_controller")
   )
   expect_true(grepl("tar_resources_crew", result))
@@ -143,7 +162,8 @@ test_that("warns when quantitative + EffectiveN", {
   expect_warning(
     generate_gwas_meta_pipeline("BMI", trait_type = "quantitative",
                                 n_col = "EffectiveN", manifest_df = make_manifest_df(),
-                                hm3_path = "/nonexistent/w_hm3.snplist"),
+                                hm3_path = "/nonexistent/w_hm3.snplist",
+                                dbsnp_path = "/nonexistent/dbSNP155"),
     "unusual"
   )
 })
@@ -190,7 +210,8 @@ test_that("generated code uses names = tar_name in tar_map", {
   result <- suppressWarnings(
     generate_gwas_meta_pipeline("CAD", trait_type = "binary",
                                 n_col = "EffectiveN", manifest_df = make_manifest_df(),
-                                hm3_path = "/nonexistent/w_hm3.snplist")
+                                hm3_path = "/nonexistent/w_hm3.snplist",
+                                dbsnp_path = "/nonexistent/dbSNP155")
   )
   expect_true(grepl("names  = tar_name", result, fixed = TRUE))
   expect_false(grepl("names  = study",   result, fixed = TRUE))
@@ -200,7 +221,8 @@ test_that("warns when manifest_df paths do not exist", {
   expect_warning(
     generate_gwas_meta_pipeline("CAD", trait_type = "binary", n_col = "EffectiveN",
                                 manifest_df = make_manifest_df(),
-                                hm3_path = "/nonexistent/w_hm3.snplist"),
+                                hm3_path = "/nonexistent/w_hm3.snplist",
+                                dbsnp_path = "/nonexistent/dbSNP155"),
     "do not exist"
   )
 })
@@ -219,8 +241,30 @@ test_that("warns when hm3_path does not exist", {
   expect_warning(
     generate_gwas_meta_pipeline("CAD", trait_type = "binary", n_col = "EffectiveN",
                                 manifest_df = make_manifest_df(),
-                                hm3_path = "/nonexistent/w_hm3.snplist"),
+                                hm3_path = "/nonexistent/w_hm3.snplist",
+                                dbsnp_path = "/nonexistent/dbSNP155"),
     "hm3_path"
+  )
+})
+
+# --- dbsnp_path validation ---
+
+test_that("errors when dbsnp_path missing", {
+  expect_error(
+    generate_gwas_meta_pipeline("CAD", trait_type = "binary", n_col = "EffectiveN",
+                                manifest_df = make_manifest_df(),
+                                hm3_path = "/nonexistent/w_hm3.snplist"),
+    "dbsnp_path"
+  )
+})
+
+test_that("warns when dbsnp_path does not exist", {
+  expect_warning(
+    generate_gwas_meta_pipeline("CAD", trait_type = "binary", n_col = "EffectiveN",
+                                manifest_df = make_manifest_df(),
+                                hm3_path = "/nonexistent/w_hm3.snplist",
+                                dbsnp_path = "/nonexistent/dbSNP155"),
+    "dbsnp_path"
   )
 })
 
@@ -231,10 +275,12 @@ test_that("no file-existence warning when all paths exist", {
     file.create(mdf$path)
     hm3 <- file.path(getwd(), "w_hm3.snplist")
     file.create(hm3)
+    dbsnp <- file.path(getwd(), "dbSNP155")
+    dir.create(dbsnp)
     expect_no_warning(
       generate_gwas_meta_pipeline("CAD", trait_type = "binary",
                                   n_col = "EffectiveN", manifest_df = mdf,
-                                  hm3_path = hm3)
+                                  hm3_path = hm3, dbsnp_path = dbsnp)
     )
   })
 })
