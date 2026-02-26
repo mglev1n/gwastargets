@@ -10,6 +10,7 @@ generate_gwas_meta_pipeline(
   n_col,
   manifest_df,
   hm3_path,
+  dbsnp_path,
   crew_controller = NULL,
   output_base_dir = "Data"
 )
@@ -34,6 +35,9 @@ output.}
 
 \item{hm3_path}{Path to the LDSC HapMap3 SNP list file (e.g.
 \code{w_hm3.snplist}). Required.}
+
+\item{dbsnp_path}{Path to the dbSNP155 reference directory passed to
+\code{\link[=prep_gwas]{prep_gwas()}}. Required.}
 
 \item{crew_controller}{Name of the \code{crew} controller to use for
 resource-intensive targets (\code{meta_ALL} and \code{meta_common_variants_ALL}).
