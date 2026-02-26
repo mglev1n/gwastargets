@@ -19,6 +19,7 @@ generate_gwas_meta_pipeline(
   n_col,
   manifest_df,
   hm3_path,
+  dbsnp_path,
   crew_controller = NULL,
   output_base_dir = "Data"
 )
@@ -54,6 +55,12 @@ generate_gwas_meta_pipeline(
 - hm3_path:
 
   Path to the LDSC HapMap3 SNP list file (e.g. `w_hm3.snplist`).
+  Required.
+
+- dbsnp_path:
+
+  Path to the dbSNP155 reference directory passed to
+  [`prep_gwas()`](https://mglev1n.github.io/gwastargets/reference/prep_gwas.md).
   Required.
 
 - crew_controller:
