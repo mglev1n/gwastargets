@@ -1,6 +1,6 @@
 Package: gwastargets
 Title: GWAS Meta-Analysis Pipeline Functions
-Version: 0.4.0
+Version: 0.4.1
 Authors@R: person("Michael", "Levin", email = "michael.levin@pennmedicine.upenn.edu",
     role = c("aut", "cre"), comment = c(ORCID = "0000-0002-9937-9932"))
 Description: Functions for multi-cohort GWAS meta-analysis supporting binary

@@ -28,9 +28,10 @@ articles:
 
 reference:
   - title: "Pipeline generation"
-    desc: "Generate a complete `targets` pipeline from a cohort manifest."
+    desc: "Generate a complete `targets` pipeline and Quarto report chunks from a cohort manifest."
     contents:
       - generate_gwas_meta_pipeline
+      - generate_report_chunks
 
   - title: "Per-cohort preparation"
     desc: "Clean, harmonize, and QC individual cohort summary statistics."
@@ -39,6 +40,7 @@ reference:
       - clean_gwas
       - harmonize_sumstats_headers
       - snp_match_munge
+      - build_column_map
 
   - title: "Quality control"
     desc: "Summarize per-cohort statistics before meta-analysis."
