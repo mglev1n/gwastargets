@@ -14,7 +14,7 @@ The typical workflow is:
     [`generate_gwas_meta_pipeline()`](https://mglev1n.github.io/gwastargets/reference/generate_gwas_meta_pipeline.md)
     to produce `_targets.R` code
 3.  Paste the output into your `_targets.R` and run
-    [`targets::tar_make()`](https://docs.ropensci.org/targets/reference/tar_make.html)
+    `targets::tar_make()`
 
 The pipeline functions
 ([`prep_gwas()`](https://mglev1n.github.io/gwastargets/reference/prep_gwas.md),
