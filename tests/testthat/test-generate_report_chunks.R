@@ -119,6 +119,30 @@ test_that("per-ancestry loci chunks controlled by include_loci", {
   expect_false(grepl("meta_loci", result_without))
 })
 
+# --- output_file parameter ---
+
+test_that("output_file = NULL returns visibly", {
+  result <- withVisible(
+    generate_report_chunks("CAD", manifest_df = make_manifest_df())
+  )
+  expect_true(result$visible)
+})
+
+test_that("output_file writes file, creates parent dirs, returns invisibly", {
+  withr::with_tempdir({
+    outpath <- file.path(getwd(), "sub", "dir", "report.qmd")
+    result <- withVisible(
+      generate_report_chunks("CAD", manifest_df = make_manifest_df(),
+                             output_file = outpath)
+    )
+    expect_false(result$visible)
+    expect_true(file.exists(outpath))
+    # Return value matches file content
+    file_content <- paste(readLines(outpath), collapse = "\n")
+    expect_equal(as.character(result$value), file_content)
+  })
+})
+
 test_that("errors on missing trait", {
   expect_error(
     generate_report_chunks(manifest_df = make_manifest_df()),

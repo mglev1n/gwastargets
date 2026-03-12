@@ -17,6 +17,9 @@
 #'   targets (only ancestries with 2+ cohorts).
 #' @param include_loci Logical; whether to include genome-wide significant
 #'   loci table chunks. Default `TRUE`.
+#' @param output_file Optional file path to write the generated chunks to. When
+#'   provided, parent directories are created automatically and the string is
+#'   returned invisibly. When `NULL` (default), the string is returned visibly.
 #'
 #' @return A length-1 character string containing quarto markdown with
 #'   embedded R code chunks.
@@ -39,7 +42,8 @@
 #' @importFrom glue glue glue_collapse
 #' @importFrom dplyr add_count filter distinct pull
 #' @export
-generate_report_chunks <- function(trait, manifest_df, include_loci = TRUE) {
+generate_report_chunks <- function(trait, manifest_df, include_loci = TRUE,
+                                   output_file = NULL) {
 
   # Validate trait
   if (missing(trait) || !is.character(trait) || length(trait) != 1 || !nzchar(trait)) {
@@ -156,7 +160,7 @@ knitr::include_graphics(targets::tar_read(<<trait_lower>>_meta_manhattan_png_<<a
 <<glue::glue_collapse(ancestry_panels, sep = "\n")>>', .open = "<<", .close = ">>")
   }
 
-  glue::glue(
+  chunks <- glue::glue(
 '## <<trait_upper>> Results
 
 ### Cohort Overview
@@ -179,4 +183,11 @@ targets::tar_read(<<trait_lower>>_precision_plot)
 <<ancestry_tabs>>
 :::
 ', .open = "<<", .close = ">>")
+
+  if (!is.null(output_file)) {
+    fs::dir_create(dirname(output_file))
+    writeLines(chunks, output_file)
+    return(invisible(chunks))
+  }
+  chunks
 }

@@ -407,6 +407,69 @@ test_that("unrecognized col_* columns produce a warning", {
   )
 })
 
+# --- trait-prefixed hm3 targets ---
+
+test_that("hm3 target is prefixed with trait name", {
+  result <- suppressWarnings(
+    generate_gwas_meta_pipeline("CAD", trait_type = "binary",
+                                n_col = "EffectiveN", manifest_df = make_manifest_df(),
+                                hm3_path = "/nonexistent/w_hm3.snplist",
+                                dbsnp_path = "/nonexistent/dbSNP155")
+  )
+  # tar_file_read uses cad_hm3, not bare hm3
+  expect_true(grepl("tar_file_read(\n    cad_hm3,", result, fixed = TRUE))
+  expect_false(grepl("tar_file_read(\n    hm3,", result, fixed = TRUE))
+  # hm3 argument in prep_gwas references cad_hm3
+  expect_true(grepl("hm3           = cad_hm3,", result, fixed = TRUE))
+  # info_snp references cad_hm3
+  expect_true(grepl("info_snp       = cad_hm3 |> select(", result, fixed = TRUE))
+})
+
+test_that("hm3 target prefix works for different traits", {
+  result <- suppressWarnings(
+    generate_gwas_meta_pipeline("BMI", trait_type = "quantitative",
+                                n_col = "N", manifest_df = make_manifest_df(),
+                                hm3_path = "/nonexistent/w_hm3.snplist",
+                                dbsnp_path = "/nonexistent/dbSNP155")
+  )
+  expect_true(grepl("bmi_hm3", result))
+  expect_false(grepl("tar_file_read(\n    hm3,", result, fixed = TRUE))
+})
+
+# --- output_file parameter ---
+
+test_that("output_file = NULL returns visibly", {
+  result <- suppressWarnings(withVisible(
+    generate_gwas_meta_pipeline("CAD", trait_type = "binary",
+                                n_col = "EffectiveN", manifest_df = make_manifest_df(),
+                                hm3_path = "/nonexistent/w_hm3.snplist",
+                                dbsnp_path = "/nonexistent/dbSNP155",
+                                output_file = NULL)
+  ))
+  expect_true(result$visible)
+})
+
+test_that("output_file writes file, creates parent dirs, returns invisibly", {
+  withr::with_tempdir({
+    outpath <- file.path(getwd(), "sub", "dir", "pipeline.qmd")
+    result <- suppressWarnings(withVisible(
+      generate_gwas_meta_pipeline("CAD", trait_type = "binary",
+                                  n_col = "EffectiveN", manifest_df = make_manifest_df(),
+                                  hm3_path = "/nonexistent/w_hm3.snplist",
+                                  dbsnp_path = "/nonexistent/dbSNP155",
+                                  output_file = outpath)
+    ))
+    expect_false(result$visible)
+    expect_true(file.exists(outpath))
+    # Return value is raw pipeline code (no chunk wrapper)
+    expect_false(grepl("```{targets", result$value, fixed = TRUE))
+    # File content IS wrapped in targets chunk
+    file_content <- paste(readLines(outpath), collapse = "\n")
+    expect_true(grepl("```{targets cad-pipeline}", file_content, fixed = TRUE))
+    expect_true(endsWith(file_content, "```"))
+  })
+})
+
 test_that("no file-existence warning when all paths exist", {
   withr::with_tempdir({
     mdf <- make_manifest_df()
