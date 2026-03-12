@@ -1,8 +1,8 @@
 Package: gwastargets
 Title: GWAS Meta-Analysis Pipeline Functions
-Version: 0.3.0
-Authors@R: person("First", "Last", email = "email@example.com",
-    role = c("aut", "cre"))
+Version: 0.4.0
+Authors@R: person("Michael", "Levin", email = "michael.levin@pennmedicine.upenn.edu",
+    role = c("aut", "cre"), comment = c(ORCID = "0000-0002-9937-9932"))
 Description: Functions for multi-cohort GWAS meta-analysis supporting binary
     and quantitative traits. Provides harmonization, QC cleaning, allele
     matching, LDSC intercept correction, IVW meta-analysis, loci extraction,
