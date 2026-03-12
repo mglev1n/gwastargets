@@ -4,13 +4,16 @@
 \alias{clean_gwas}
 \title{Clean GWAS summary statistics with tidyGWAS}
 \usage{
-clean_gwas(sumstats_file, logging_path, ...)
+clean_gwas(sumstats_file, logging_path, column_map = NULL, ...)
 }
 \arguments{
 \item{sumstats_file}{Path to a raw GWAS summary statistics file (plain text
 or \code{.gz}).}
 
 \item{logging_path}{Directory where the tidyGWAS log file will be saved.}
+
+\item{column_map}{Optional named character vector of per-cohort column
+renames passed to \code{\link[=harmonize_sumstats_headers]{harmonize_sumstats_headers()}}. Default \code{NULL}.}
 
 \item{...}{Additional arguments forwarded to \code{\link[tidyGWAS:tidyGWAS]{tidyGWAS::tidyGWAS()}}.}
 }

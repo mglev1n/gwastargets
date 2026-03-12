@@ -4,11 +4,17 @@
 \alias{harmonize_sumstats_headers}
 \title{Harmonize GWAS summary statistics headers}
 \usage{
-harmonize_sumstats_headers(input_file)
+harmonize_sumstats_headers(input_file, column_map = NULL)
 }
 \arguments{
 \item{input_file}{Path to a plain-text or gzip-compressed summary statistics
 file readable by \code{\link[data.table:fread]{data.table::fread()}}.}
+
+\item{column_map}{Optional named character vector of per-cohort column
+renames. Names are source column names in the file; values are target
+harmonised names. Applied \strong{before} the built-in dictionary so that
+user overrides take priority. Use \code{\link[=build_column_map]{build_column_map()}} to construct this
+vector from manifest \verb{col_*} values. Default \code{NULL} (no custom mapping).}
 }
 \value{
 A \code{\link[data.table:data.table]{data.table::data.table()}} with harmonised column names.

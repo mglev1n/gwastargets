@@ -12,7 +12,11 @@ generate_gwas_meta_pipeline(
   hm3_path,
   dbsnp_path,
   crew_controller = NULL,
-  output_base_dir = "Data"
+  output_base_dir = "Data",
+  manhattan_width = 16,
+  manhattan_height = 6,
+  manhattan_dpi = 300,
+  output_file = NULL
 )
 }
 \arguments{
@@ -45,6 +49,21 @@ If \code{NULL} (default), no \code{resources} block is added to those targets.}
 
 \item{output_base_dir}{Base output directory for intermediate files.
 Default \code{"Data"}.}
+
+\item{manhattan_width}{Width in inches for Manhattan plot export.
+Default \code{16}.}
+
+\item{manhattan_height}{Height in inches for Manhattan plot export.
+Default \code{6}.}
+
+\item{manhattan_dpi}{DPI for high-resolution Manhattan plot PNG export.
+Default \code{300}.}
+
+\item{output_file}{Optional file path to write the generated code to. When
+provided, parent directories are created automatically, the code is wrapped
+in a \verb{```\{targets <trait>-pipeline\}} chunk, and the raw pipeline
+code string is returned invisibly. When \code{NULL} (default), the string is
+returned visibly.}
 }
 \value{
 A length-1 character string containing valid R code defining a
@@ -54,7 +73,8 @@ A length-1 character string containing valid R code defining a
 Generates a complete \code{targets} / \code{tarchetypes} pipeline as a character
 string, ready to be pasted into a \verb{_targets.R} file. The generated code
 covers per-cohort preparation, LDSC heritability estimation, per-ancestry
-and all-populations IVW meta-analysis, loci extraction, Manhattan plots,
+and all-populations IVW meta-analysis, loci extraction, Manhattan plots
+(with PDF and high-DPI PNG export targets for fast report rendering),
 and MR-MEGA MDS. Validates \code{trait_type}, \code{n_col}, and \code{manifest_df} before
 generating any code. The manifest is serialized as a \code{tibble::tribble()}
 call in the generated output so the pipeline is self-contained.

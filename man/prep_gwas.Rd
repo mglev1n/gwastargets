@@ -13,6 +13,7 @@ prep_gwas(
   n_col,
   dbsnp_path = "Data/dbSNP155",
   logging_path = "Data/logs",
+  column_map = NULL,
   ...
 )
 }
@@ -36,6 +37,10 @@ traits and \code{N} for quantitative traits (required, no default).}
 
 \item{logging_path}{Directory for tidyGWAS log files. Default
 \code{"Data/logs"}.}
+
+\item{column_map}{Optional named character vector of per-cohort column
+renames passed through to \code{\link[=clean_gwas]{clean_gwas()}} and ultimately to
+\code{\link[=harmonize_sumstats_headers]{harmonize_sumstats_headers()}}. Default \code{NULL}.}
 
 \item{...}{Additional arguments forwarded to \code{\link[=clean_gwas]{clean_gwas()}}.}
 }
