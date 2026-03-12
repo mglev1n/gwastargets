@@ -37,6 +37,7 @@ Imports:
     tidyGWAS,
     vctrs
 Suggests:
+    DT,
     knitr,
     mockery,
     rmarkdown,

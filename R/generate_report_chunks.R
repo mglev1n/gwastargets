@@ -3,7 +3,9 @@
 #' @description
 #' Generates quarto-compatible R code chunks as a character string for
 #' inclusion in multi-trait reports. Manhattan plots use
-#' `knitr::include_graphics()` with PDF file targets for fast rendering.
+#' `knitr::include_graphics()` with PDF file targets for fast rendering
+#' (displayed at full width via `out.width = "100%"`). Loci tables are
+#' rendered with `DT::datatable()` with CSV/Excel export buttons.
 #' Precision plots and LDSC heatmaps use native `tar_read()` calls.
 #' Sections with per-ancestry results (LDSC heatmaps, Manhattan plots)
 #' are organized using Quarto tabset panels.
@@ -104,7 +106,11 @@ targets::tar_read(<<trait_lower>>_ldsc_rg_qc_heatmap_<<anc>>)
     all_loci <- glue::glue(
 '
 ```{r}
-targets::tar_read(<<trait_lower>>_meta_loci_ALL)
+targets::tar_read(<<trait_lower>>_meta_loci_ALL) |>
+  DT::datatable(extensions = "Buttons",
+                options = list(dom = "Bfrtip",
+                               buttons = c("csv", "excel"),
+                               scrollX = TRUE))
 ```
 ', .open = "<<", .close = ">>")
   }
@@ -113,6 +119,7 @@ targets::tar_read(<<trait_lower>>_meta_loci_ALL)
 '#### All Populations
 
 ```{r}
+#| out-width: "100%"
 knitr::include_graphics(targets::tar_read(<<trait_lower>>_meta_manhattan_pdf_ALL))
 ```
 <<all_loci>>', .open = "<<", .close = ">>")
@@ -126,7 +133,11 @@ knitr::include_graphics(targets::tar_read(<<trait_lower>>_meta_manhattan_pdf_ALL
         anc_loci <- glue::glue(
 '
 ```{r}
-targets::tar_read(<<trait_lower>>_meta_loci_<<anc>>)
+targets::tar_read(<<trait_lower>>_meta_loci_<<anc>>) |>
+  DT::datatable(extensions = "Buttons",
+                options = list(dom = "Bfrtip",
+                               buttons = c("csv", "excel"),
+                               scrollX = TRUE))
 ```
 ', .open = "<<", .close = ">>")
       }
@@ -134,6 +145,7 @@ targets::tar_read(<<trait_lower>>_meta_loci_<<anc>>)
 '#### <<anc>>
 
 ```{r}
+#| out-width: "100%"
 knitr::include_graphics(targets::tar_read(<<trait_lower>>_meta_manhattan_pdf_<<anc>>))
 ```
 <<anc_loci>>', .open = "<<", .close = ">>")

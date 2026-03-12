@@ -15,10 +15,11 @@ test_that("contains trait name in header", {
   expect_true(grepl("## CAD Results", result, fixed = TRUE))
 })
 
-test_that("manhattan chunks use knitr::include_graphics with _pdf targets", {
+test_that("manhattan chunks use knitr::include_graphics with _pdf targets and full width", {
   result <- generate_report_chunks("CAD", manifest_df = make_manifest_df())
   expect_true(grepl("knitr::include_graphics", result))
   expect_true(grepl("meta_manhattan_pdf_ALL", result))
+  expect_true(grepl("out-width", result))
 })
 
 test_that("ALL population manhattan is always present in tabset", {
@@ -85,9 +86,12 @@ test_that("per-ancestry manhattan tabs present only for 2+ cohort ancestries", {
   expect_false(grepl("#### AFR", result, fixed = TRUE))
 })
 
-test_that("loci chunks included by default", {
+test_that("loci chunks included by default with DT::datatable", {
   result <- generate_report_chunks("CAD", manifest_df = make_manifest_df())
   expect_true(grepl("cad_meta_loci_ALL", result))
+  expect_true(grepl("DT::datatable", result, fixed = TRUE))
+  expect_true(grepl("Buttons", result))
+  expect_true(grepl("csv", result))
 })
 
 test_that("loci chunks excluded when include_loci = FALSE", {
