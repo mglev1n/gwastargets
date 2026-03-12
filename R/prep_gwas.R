@@ -22,6 +22,9 @@
 #'   `"Data/dbSNP155"`.
 #' @param logging_path Directory for tidyGWAS log files. Default
 #'   `"Data/logs"`.
+#' @param column_map Optional named character vector of per-cohort column
+#'   renames passed through to [clean_gwas()] and ultimately to
+#'   [harmonize_sumstats_headers()]. Default `NULL`.
 #' @param ... Additional arguments forwarded to [clean_gwas()].
 #'
 #' @return The file path of the written parquet file (invisibly).
@@ -51,6 +54,7 @@ prep_gwas <- function(sumstats_file, hm3, ancestry, output_path,
                       n_col,
                       dbsnp_path   = "Data/dbSNP155",
                       logging_path = "Data/logs",
+                      column_map   = NULL,
                       ...) {
 
   trait_type <- match.arg(trait_type, choices = c("binary", "quantitative"))
@@ -87,6 +91,7 @@ prep_gwas <- function(sumstats_file, hm3, ancestry, output_path,
     sumstats_file = sumstats_file,
     dbsnp_path    = dbsnp_path,
     logging_path  = logging_path,
+    column_map    = column_map,
     ...
   )
 

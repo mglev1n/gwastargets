@@ -11,6 +11,8 @@
 #' @param sumstats_file Path to a raw GWAS summary statistics file (plain text
 #'   or `.gz`).
 #' @param logging_path Directory where the tidyGWAS log file will be saved.
+#' @param column_map Optional named character vector of per-cohort column
+#'   renames passed to [harmonize_sumstats_headers()]. Default `NULL`.
 #' @param ... Additional arguments forwarded to [tidyGWAS::tidyGWAS()].
 #'
 #' @return The cleaned summary statistics object returned by
@@ -28,13 +30,13 @@
 #' @importFrom dplyr filter
 #' @importFrom fs file_temp dir_create path file_copy
 #' @export
-clean_gwas <- function(sumstats_file, logging_path, ...) {
+clean_gwas <- function(sumstats_file, logging_path, column_map = NULL, ...) {
   cli::cli_alert_info("Cleaning GWAS summary statistics: {sumstats_file}")
 
   out_dir <- fs::file_temp()
 
   sumstats_cleaned <- tidyGWAS::tidyGWAS(
-    tbl = harmonize_sumstats_headers(sumstats_file) |>
+    tbl = harmonize_sumstats_headers(sumstats_file, column_map = column_map) |>
       dplyr::filter(EFF_ALL_FREQ > 0.001 & 1 - EFF_ALL_FREQ > 0.001),
     output_dir = out_dir,
     logfile    = TRUE,

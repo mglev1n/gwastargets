@@ -8,6 +8,11 @@
 #'
 #' @param input_file Path to a plain-text or gzip-compressed summary statistics
 #'   file readable by [data.table::fread()].
+#' @param column_map Optional named character vector of per-cohort column
+#'   renames. Names are source column names in the file; values are target
+#'   harmonised names. Applied **before** the built-in dictionary so that
+#'   user overrides take priority. Use [build_column_map()] to construct this
+#'   vector from manifest `col_*` values. Default `NULL` (no custom mapping).
 #'
 #' @return A [data.table::data.table()] with harmonised column names.
 #'
@@ -19,7 +24,7 @@
 #' @importFrom cli cli_alert_info cli_alert_success
 #' @importFrom data.table fread
 #' @export
-harmonize_sumstats_headers <- function(input_file) {
+harmonize_sumstats_headers <- function(input_file, column_map = NULL) {
   header_map <- c(
     # Case / control N
     "N_CASE"    = "N_CASES",
@@ -61,6 +66,18 @@ harmonize_sumstats_headers <- function(input_file) {
   cli::cli_alert_info("Original columns: {paste(original_cols, collapse = ', ')}")
 
   new_cols <- original_cols
+
+  # Apply per-cohort overrides first (before hardcoded dictionary)
+  if (!is.null(column_map)) {
+    for (old_name in names(column_map)) {
+      if (old_name %in% new_cols) {
+        new_cols[new_cols == old_name] <- column_map[old_name]
+        cli::cli_alert_success("Custom map: {old_name} -> {column_map[old_name]}")
+      }
+    }
+  }
+
+  # Then apply hardcoded dictionary
   for (old_name in names(header_map)) {
     if (old_name %in% new_cols) {
       new_cols[new_cols == old_name] <- header_map[old_name]

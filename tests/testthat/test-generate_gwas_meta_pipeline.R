@@ -352,6 +352,61 @@ test_that("custom manhattan_dpi appears in generated code", {
   expect_true(grepl("dpi = 600", result, fixed = TRUE))
 })
 
+# --- col_* column mapping in manifest ---
+
+test_that("manifest without col_* columns: no column_map in generated code", {
+  result <- suppressWarnings(
+    generate_gwas_meta_pipeline("CAD", trait_type = "binary",
+                                n_col = "EffectiveN", manifest_df = make_manifest_df(),
+                                hm3_path = "/nonexistent/w_hm3.snplist",
+                                dbsnp_path = "/nonexistent/dbSNP155")
+  )
+  expect_false(grepl("column_map", result))
+  expect_false(grepl("build_column_map", result))
+})
+
+test_that("manifest with col_* columns: generated code includes build_column_map()", {
+  result <- suppressWarnings(
+    generate_gwas_meta_pipeline("CAD", trait_type = "binary",
+                                n_col = "EffectiveN",
+                                manifest_df = make_manifest_df_with_colmap(),
+                                hm3_path = "/nonexistent/w_hm3.snplist",
+                                dbsnp_path = "/nonexistent/dbSNP155")
+  )
+  expect_true(grepl("column_map", result))
+  expect_true(grepl("build_column_map", result))
+  expect_true(grepl("col_eaf", result))
+  expect_true(grepl("col_beta", result))
+})
+
+test_that("NA values in col_* serialize as unquoted NA in tribble", {
+  result <- suppressWarnings(
+    generate_gwas_meta_pipeline("CAD", trait_type = "binary",
+                                n_col = "EffectiveN",
+                                manifest_df = make_manifest_df_with_colmap(),
+                                hm3_path = "/nonexistent/w_hm3.snplist",
+                                dbsnp_path = "/nonexistent/dbSNP155")
+  )
+  # Should have unquoted NA, not "NA"
+  expect_true(grepl('"MY_FREQ"', result, fixed = TRUE))
+  expect_true(grepl('"BETA_VAL"', result, fixed = TRUE))
+  # The tribble should contain unquoted NA values
+  # Extract the tribble section and check for NA not wrapped in quotes
+  expect_false(grepl('"NA"', result, fixed = TRUE))
+})
+
+test_that("unrecognized col_* columns produce a warning", {
+  mdf <- make_manifest_df()
+  mdf$col_garbage <- c("FOO", "BAR")
+  expect_warning(
+    generate_gwas_meta_pipeline("CAD", trait_type = "binary",
+                                n_col = "EffectiveN", manifest_df = mdf,
+                                hm3_path = "/nonexistent/w_hm3.snplist",
+                                dbsnp_path = "/nonexistent/dbSNP155"),
+    "unrecognized"
+  )
+})
+
 test_that("no file-existence warning when all paths exist", {
   withr::with_tempdir({
     mdf <- make_manifest_df()

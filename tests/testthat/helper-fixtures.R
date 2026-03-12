@@ -86,3 +86,12 @@ make_manifest_df <- function() {
     stringsAsFactors = FALSE
   )
 }
+
+#' Make a manifest data frame with col_* column mapping overrides.
+#' cohort1 has a custom EAF column; cohort2 uses defaults (NA).
+make_manifest_df_with_colmap <- function() {
+  df <- make_manifest_df()
+  df$col_eaf  <- c("MY_FREQ", NA)
+  df$col_beta <- c(NA, "BETA_VAL")
+  df
+}
