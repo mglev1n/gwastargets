@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gwastargets</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -34,7 +34,7 @@
     <div class="section level2">
       <h2 id="pipeline-generation">Pipeline generation<a class="anchor" aria-label="anchor" href="#pipeline-generation"></a></h2>
 
-      <div class="section-desc"><p>Generate a complete <code>targets</code> pipeline from a cohort manifest.</p></div>
+      <div class="section-desc"><p>Generate a complete <code>targets</code> pipeline and Quarto report chunks from a cohort manifest.</p></div>
 
       <dl></dl></div><div class="section level2">
 
@@ -47,6 +47,13 @@
 
         </dt>
         <dd>Generate targets pipeline code for GWAS meta-analysis</dd>
+
+        <dt>
+
+          <code><a href="generate_report_chunks.html">generate_report_chunks()</a></code>
+
+        </dt>
+        <dd>Generate Quarto report chunks for a GWAS meta-analysis trait</dd>
       </dl></div><div class="section level2">
       <h2 id="per-cohort-preparation">Per-cohort preparation<a class="anchor" aria-label="anchor" href="#per-cohort-preparation"></a></h2>
 
@@ -84,6 +91,13 @@
 
         </dt>
         <dd>Match GWAS SNPs against a reference SNP list</dd>
+
+        <dt>
+
+          <code><a href="build_column_map.html">build_column_map()</a></code>
+
+        </dt>
+        <dd>Build a column rename map from per-cohort manifest values</dd>
       </dl></div><div class="section level2">
       <h2 id="quality-control">Quality control<a class="anchor" aria-label="anchor" href="#quality-control"></a></h2>
 

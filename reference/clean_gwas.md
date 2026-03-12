@@ -10,7 +10,7 @@ for full QC. The tidyGWAS log file is copied to `logging_path`.
 ## Usage
 
 ``` r
-clean_gwas(sumstats_file, logging_path, ...)
+clean_gwas(sumstats_file, logging_path, column_map = NULL, ...)
 ```
 
 ## Arguments
@@ -22,6 +22,12 @@ clean_gwas(sumstats_file, logging_path, ...)
 - logging_path:
 
   Directory where the tidyGWAS log file will be saved.
+
+- column_map:
+
+  Optional named character vector of per-cohort column renames passed to
+  [`harmonize_sumstats_headers()`](https://mglev1n.github.io/gwastargets/reference/harmonize_sumstats_headers.md).
+  Default `NULL`.
 
 - ...:
 

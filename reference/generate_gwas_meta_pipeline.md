@@ -4,7 +4,8 @@ Generates a complete `targets` / `tarchetypes` pipeline as a character
 string, ready to be pasted into a `_targets.R` file. The generated code
 covers per-cohort preparation, LDSC heritability estimation,
 per-ancestry and all-populations IVW meta-analysis, loci extraction,
-Manhattan plots, and MR-MEGA MDS. Validates `trait_type`, `n_col`, and
+Manhattan plots (with PDF and high-DPI PNG export targets for fast
+report rendering), and MR-MEGA MDS. Validates `trait_type`, `n_col`, and
 `manifest_df` before generating any code. The manifest is serialized as
 a
 [`tibble::tribble()`](https://tibble.tidyverse.org/reference/tribble.html)
@@ -21,7 +22,11 @@ generate_gwas_meta_pipeline(
   hm3_path,
   dbsnp_path,
   crew_controller = NULL,
-  output_base_dir = "Data"
+  output_base_dir = "Data",
+  manhattan_width = 16,
+  manhattan_height = 6,
+  manhattan_dpi = 300,
+  output_file = NULL
 )
 ```
 
@@ -72,6 +77,26 @@ generate_gwas_meta_pipeline(
 - output_base_dir:
 
   Base output directory for intermediate files. Default `"Data"`.
+
+- manhattan_width:
+
+  Width in inches for Manhattan plot export. Default `16`.
+
+- manhattan_height:
+
+  Height in inches for Manhattan plot export. Default `6`.
+
+- manhattan_dpi:
+
+  DPI for high-resolution Manhattan plot PNG export. Default `300`.
+
+- output_file:
+
+  Optional file path to write the generated code to. When provided,
+  parent directories are created automatically, the code is wrapped in a
+  ```` ```{targets <trait>-pipeline} ```` chunk, and the raw pipeline
+  code string is returned invisibly. When `NULL` (default), the string
+  is returned visibly.
 
 ## Value
 

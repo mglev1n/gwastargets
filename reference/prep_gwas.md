@@ -23,6 +23,7 @@ prep_gwas(
   n_col,
   dbsnp_path = "Data/dbSNP155",
   logging_path = "Data/logs",
+  column_map = NULL,
   ...
 )
 ```
@@ -62,6 +63,15 @@ prep_gwas(
 - logging_path:
 
   Directory for tidyGWAS log files. Default `"Data/logs"`.
+
+- column_map:
+
+  Optional named character vector of per-cohort column renames passed
+  through to
+  [`clean_gwas()`](https://mglev1n.github.io/gwastargets/reference/clean_gwas.md)
+  and ultimately to
+  [`harmonize_sumstats_headers()`](https://mglev1n.github.io/gwastargets/reference/harmonize_sumstats_headers.md).
+  Default `NULL`.
 
 - ...:
 

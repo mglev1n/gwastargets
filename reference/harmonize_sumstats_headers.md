@@ -7,7 +7,7 @@ unchanged.
 ## Usage
 
 ``` r
-harmonize_sumstats_headers(input_file)
+harmonize_sumstats_headers(input_file, column_map = NULL)
 ```
 
 ## Arguments
@@ -17,6 +17,16 @@ harmonize_sumstats_headers(input_file)
   Path to a plain-text or gzip-compressed summary statistics file
   readable by
   [`data.table::fread()`](https://rdrr.io/pkg/data.table/man/fread.html).
+
+- column_map:
+
+  Optional named character vector of per-cohort column renames. Names
+  are source column names in the file; values are target harmonised
+  names. Applied **before** the built-in dictionary so that user
+  overrides take priority. Use
+  [`build_column_map()`](https://mglev1n.github.io/gwastargets/reference/build_column_map.md)
+  to construct this vector from manifest `col_*` values. Default `NULL`
+  (no custom mapping).
 
 ## Value
 

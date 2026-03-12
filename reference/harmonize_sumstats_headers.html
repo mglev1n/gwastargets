@@ -9,7 +9,7 @@ columns to a standardised vocabulary. Unmapped columns are left unchanged."></he
 
     <a class="navbar-brand me-2" href="../index.html">gwastargets</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,7 +42,7 @@ columns to a standardised vocabulary. Unmapped columns are left unchanged.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">harmonize_sumstats_headers</span><span class="op">(</span><span class="va">input_file</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">harmonize_sumstats_headers</span><span class="op">(</span><span class="va">input_file</span>, column_map <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -52,6 +52,14 @@ columns to a standardised vocabulary. Unmapped columns are left unchanged.</p>
 <dl><dt id="arg-input-file">input_file<a class="anchor" aria-label="anchor" href="#arg-input-file"></a></dt>
 <dd><p>Path to a plain-text or gzip-compressed summary statistics
 file readable by <code><a href="https://rdrr.io/pkg/data.table/man/fread.html" class="external-link">data.table::fread()</a></code>.</p></dd>
+
+
+<dt id="arg-column-map">column_map<a class="anchor" aria-label="anchor" href="#arg-column-map"></a></dt>
+<dd><p>Optional named character vector of per-cohort column
+renames. Names are source column names in the file; values are target
+harmonised names. Applied <strong>before</strong> the built-in dictionary so that
+user overrides take priority. Use <code><a href="build_column_map.html">build_column_map()</a></code> to construct this
+vector from manifest <code>col_*</code> values. Default <code>NULL</code> (no custom mapping).</p></dd>
 
 </dl></div>
     <div class="section level2">

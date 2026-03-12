@@ -2,10 +2,13 @@
 
 ## Pipeline generation
 
-Generate a complete `targets` pipeline from a cohort manifest.
+Generate a complete `targets` pipeline and Quarto report chunks from a
+cohort manifest.
 
 - [`generate_gwas_meta_pipeline()`](https://mglev1n.github.io/gwastargets/reference/generate_gwas_meta_pipeline.md)
   : Generate targets pipeline code for GWAS meta-analysis
+- [`generate_report_chunks()`](https://mglev1n.github.io/gwastargets/reference/generate_report_chunks.md)
+  : Generate Quarto report chunks for a GWAS meta-analysis trait
 
 ## Per-cohort preparation
 
@@ -19,6 +22,8 @@ Clean, harmonize, and QC individual cohort summary statistics.
   : Harmonize GWAS summary statistics headers
 - [`snp_match_munge()`](https://mglev1n.github.io/gwastargets/reference/snp_match_munge.md)
   : Match GWAS SNPs against a reference SNP list
+- [`build_column_map()`](https://mglev1n.github.io/gwastargets/reference/build_column_map.md)
+  : Build a column rename map from per-cohort manifest values
 
 ## Quality control
 
