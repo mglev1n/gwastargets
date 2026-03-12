@@ -15,26 +15,19 @@ test_that("contains trait name in header", {
   expect_true(grepl("## CAD Results", result, fixed = TRUE))
 })
 
-test_that("manhattan chunks use knitr::include_graphics with proper dimensions", {
+test_that("manhattan chunks use knitr::include_graphics with PNG targets", {
   result <- generate_report_chunks("CAD", manifest_df = make_manifest_df())
   expect_true(grepl("knitr::include_graphics", result))
-  expect_true(grepl("meta_manhattan_pdf_ALL", result))
+  expect_true(grepl("meta_manhattan_png_ALL", result))
   expect_true(grepl("out-width", result))
-  expect_true(grepl("fig-width: 16", result, fixed = TRUE))
-  expect_true(grepl("fig-height: 6", result, fixed = TRUE))
-})
-
-test_that("custom manhattan dimensions propagate to chunk options", {
-  result <- generate_report_chunks("CAD", manifest_df = make_manifest_df(),
-                                   manhattan_width = 20, manhattan_height = 8)
-  expect_true(grepl("fig-width: 20", result, fixed = TRUE))
-  expect_true(grepl("fig-height: 8", result, fixed = TRUE))
+  # PNG targets used in report, not PDF
+  expect_false(grepl("meta_manhattan_pdf", result))
 })
 
 test_that("ALL population manhattan is always present in tabset", {
   result <- generate_report_chunks("CAD", manifest_df = make_manifest_df())
   expect_true(grepl("#### All Populations", result, fixed = TRUE))
-  expect_true(grepl("cad_meta_manhattan_pdf_ALL", result))
+  expect_true(grepl("cad_meta_manhattan_png_ALL", result))
 })
 
 test_that("manhattan section uses panel-tabset", {
@@ -91,7 +84,7 @@ test_that("per-ancestry manhattan tabs present only for 2+ cohort ancestries", {
   )
   result <- generate_report_chunks("CAD", manifest_df = mdf_multi)
   expect_true(grepl("#### EUR", result, fixed = TRUE))
-  expect_true(grepl("cad_meta_manhattan_pdf_EUR", result))
+  expect_true(grepl("cad_meta_manhattan_png_EUR", result))
   expect_false(grepl("#### AFR", result, fixed = TRUE))
 })
 

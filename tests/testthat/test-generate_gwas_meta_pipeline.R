@@ -268,9 +268,9 @@ test_that("warns when dbsnp_path does not exist", {
   )
 })
 
-# --- Manhattan PDF targets ---
+# --- Manhattan PDF + PNG targets ---
 
-test_that("generated code contains manhattan PDF targets with ggsave", {
+test_that("generated code contains manhattan PDF and PNG targets with ggsave", {
   result <- suppressWarnings(
     generate_gwas_meta_pipeline("CAD", trait_type = "binary",
                                 n_col = "EffectiveN", manifest_df = make_manifest_df(),
@@ -278,6 +278,7 @@ test_that("generated code contains manhattan PDF targets with ggsave", {
                                 dbsnp_path = "/nonexistent/dbSNP155")
   )
   expect_true(grepl("meta_manhattan_pdf", result))
+  expect_true(grepl("meta_manhattan_png", result))
   expect_true(grepl("ggsave", result))
   expect_true(grepl("format      = \"file\"", result, fixed = TRUE))
 })
@@ -317,7 +318,7 @@ test_that("default manhattan dimensions appear when not specified", {
   expect_true(grepl("height = 6", result, fixed = TRUE))
 })
 
-test_that("ALL population manhattan PDF target is present", {
+test_that("ALL population manhattan PDF and PNG targets are present", {
   result <- suppressWarnings(
     generate_gwas_meta_pipeline("CAD", trait_type = "binary",
                                 n_col = "EffectiveN", manifest_df = make_manifest_df(),
@@ -326,6 +327,29 @@ test_that("ALL population manhattan PDF target is present", {
   )
   expect_true(grepl("meta_manhattan_pdf_ALL", result))
   expect_true(grepl("manhattan_ALL.pdf", result))
+  expect_true(grepl("meta_manhattan_png_ALL", result))
+  expect_true(grepl("manhattan_ALL.png", result))
+})
+
+test_that("PNG targets include dpi parameter", {
+  result <- suppressWarnings(
+    generate_gwas_meta_pipeline("CAD", trait_type = "binary",
+                                n_col = "EffectiveN", manifest_df = make_manifest_df(),
+                                hm3_path = "/nonexistent/w_hm3.snplist",
+                                dbsnp_path = "/nonexistent/dbSNP155")
+  )
+  expect_true(grepl("dpi = 300", result, fixed = TRUE))
+})
+
+test_that("custom manhattan_dpi appears in generated code", {
+  result <- suppressWarnings(
+    generate_gwas_meta_pipeline("CAD", trait_type = "binary",
+                                n_col = "EffectiveN", manifest_df = make_manifest_df(),
+                                hm3_path = "/nonexistent/w_hm3.snplist",
+                                dbsnp_path = "/nonexistent/dbSNP155",
+                                manhattan_dpi = 600)
+  )
+  expect_true(grepl("dpi = 600", result, fixed = TRUE))
 })
 
 test_that("no file-existence warning when all paths exist", {
