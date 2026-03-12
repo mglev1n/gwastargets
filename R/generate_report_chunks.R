@@ -5,6 +5,8 @@
 #' inclusion in multi-trait reports. Manhattan plots use
 #' `knitr::include_graphics()` with PDF file targets for fast rendering.
 #' Precision plots and LDSC heatmaps use native `tar_read()` calls.
+#' Sections with per-ancestry results (LDSC heatmaps, Manhattan plots)
+#' are organized using Quarto tabset panels.
 #'
 #' @param trait Trait name (e.g. `"CAD"`).
 #' @param manifest_df A data frame with at least `ancestry` and `cohort`
@@ -32,13 +34,12 @@
 #' }
 #'
 #' @importFrom cli cli_abort
-#' @importFrom glue glue
+#' @importFrom glue glue glue_collapse
 #' @importFrom dplyr add_count filter distinct pull
 #' @export
 generate_report_chunks <- function(trait, manifest_df, include_loci = TRUE) {
 
   # Validate trait
-
   if (missing(trait) || !is.character(trait) || length(trait) != 1 || !nzchar(trait)) {
     cli::cli_abort(c(
       "{.arg trait} must be a single non-empty character string"
@@ -46,7 +47,6 @@ generate_report_chunks <- function(trait, manifest_df, include_loci = TRUE) {
   }
 
   # Validate manifest_df
-
   if (missing(manifest_df)) {
     cli::cli_abort(c(
       "{.arg manifest_df} must be provided",
@@ -73,50 +73,98 @@ generate_report_chunks <- function(trait, manifest_df, include_loci = TRUE) {
     dplyr::distinct(ancestry) |>
     dplyr::pull(ancestry)
 
-  # Build chunks
-  chunks <- character()
+  # Build LDSC tabset (only if there are per-ancestry sections)
+  ldsc_section <- ""
+  if (length(ancs) > 0) {
+    ldsc_panels <- vapply(ancs, function(anc) {
+      glue::glue(
+'#### <<anc>>
 
-  # Header + cohort overview + precision plot
-  chunks <- c(chunks, glue::glue(
-    '## <<trait_upper>> Results\n\n### Cohort Overview\n```{r}\ntargets::tar_read(<<trait_lower>>_cohort_overview)\n```\n\n### Precision Plot\n```{r}\ntargets::tar_read(<<trait_lower>>_precision_plot)\n```',
-    .open = "<<", .close = ">>"
-  ))
+```{r}
+targets::tar_read(<<trait_lower>>_ldsc_rg_qc_heatmap_<<anc>>)
+```
+', .open = "<<", .close = ">>")
+    }, character(1))
 
-  # LDSC rg heatmaps per ancestry
-  for (anc in ancs) {
-    chunks <- c(chunks, glue::glue(
-      '\n\n### LDSC Genetic Correlation QC - <<anc>>\n```{r}\ntargets::tar_read(<<trait_lower>>_ldsc_rg_qc_heatmap_<<anc>>)\n```',
-      .open = "<<", .close = ">>"
-    ))
+    ldsc_section <- glue::glue(
+'
+### LDSC Genetic Correlation QC
+
+::: {.panel-tabset}
+
+<<glue::glue_collapse(ldsc_panels, sep = "\n")>>
+:::
+', .open = "<<", .close = ">>")
   }
 
-  # ALL population manhattan
-  chunks <- c(chunks, glue::glue(
-    '\n\n### Manhattan Plot - All Populations\n```{r}\nknitr::include_graphics(targets::tar_read(<<trait_lower>>_meta_manhattan_pdf_ALL))\n```',
-    .open = "<<", .close = ">>"
-  ))
-
-  # ALL population loci
+  # Build Manhattan + Loci tabset
+  # ALL populations tab
+  all_loci <- ""
   if (include_loci) {
-    chunks <- c(chunks, glue::glue(
-      '\n\n### Genome-wide Significant Loci - All Populations\n```{r}\ntargets::tar_read(<<trait_lower>>_meta_loci_ALL)\n```',
-      .open = "<<", .close = ">>"
-    ))
+    all_loci <- glue::glue(
+'
+```{r}
+targets::tar_read(<<trait_lower>>_meta_loci_ALL)
+```
+', .open = "<<", .close = ">>")
   }
 
-  # Per-ancestry manhattan + loci
-  for (anc in ancs) {
-    chunks <- c(chunks, glue::glue(
-      '\n\n### Manhattan Plot - <<anc>>\n```{r}\nknitr::include_graphics(targets::tar_read(<<trait_lower>>_meta_manhattan_pdf_<<anc>>))\n```',
-      .open = "<<", .close = ">>"
-    ))
-    if (include_loci) {
-      chunks <- c(chunks, glue::glue(
-        '\n\n### Genome-wide Significant Loci - <<anc>>\n```{r}\ntargets::tar_read(<<trait_lower>>_meta_loci_<<anc>>)\n```',
-        .open = "<<", .close = ">>"
-      ))
-    }
+  all_tab <- glue::glue(
+'#### All Populations
+
+```{r}
+knitr::include_graphics(targets::tar_read(<<trait_lower>>_meta_manhattan_pdf_ALL))
+```
+<<all_loci>>', .open = "<<", .close = ">>")
+
+  # Per-ancestry tabs
+  ancestry_tabs <- ""
+  if (length(ancs) > 0) {
+    ancestry_panels <- vapply(ancs, function(anc) {
+      anc_loci <- ""
+      if (include_loci) {
+        anc_loci <- glue::glue(
+'
+```{r}
+targets::tar_read(<<trait_lower>>_meta_loci_<<anc>>)
+```
+', .open = "<<", .close = ">>")
+      }
+      glue::glue(
+'#### <<anc>>
+
+```{r}
+knitr::include_graphics(targets::tar_read(<<trait_lower>>_meta_manhattan_pdf_<<anc>>))
+```
+<<anc_loci>>', .open = "<<", .close = ">>")
+    }, character(1))
+
+    ancestry_tabs <- glue::glue(
+'
+<<glue::glue_collapse(ancestry_panels, sep = "\n")>>', .open = "<<", .close = ">>")
   }
 
-  paste(chunks, collapse = "")
+  glue::glue(
+'## <<trait_upper>> Results
+
+### Cohort Overview
+
+```{r}
+targets::tar_read(<<trait_lower>>_cohort_overview)
+```
+
+### Precision Plot
+
+```{r}
+targets::tar_read(<<trait_lower>>_precision_plot)
+```
+<<ldsc_section>>
+### Manhattan Plots & Genome-wide Significant Loci
+
+::: {.panel-tabset}
+
+<<all_tab>>
+<<ancestry_tabs>>
+:::
+', .open = "<<", .close = ">>")
 }
