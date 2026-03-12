@@ -268,6 +268,66 @@ test_that("warns when dbsnp_path does not exist", {
   )
 })
 
+# --- Manhattan PDF targets ---
+
+test_that("generated code contains manhattan PDF targets with ggsave", {
+  result <- suppressWarnings(
+    generate_gwas_meta_pipeline("CAD", trait_type = "binary",
+                                n_col = "EffectiveN", manifest_df = make_manifest_df(),
+                                hm3_path = "/nonexistent/w_hm3.snplist",
+                                dbsnp_path = "/nonexistent/dbSNP155")
+  )
+  expect_true(grepl("meta_manhattan_pdf", result))
+  expect_true(grepl("ggsave", result))
+  expect_true(grepl("format      = \"file\"", result, fixed = TRUE))
+})
+
+test_that("manhattan PDF targets use output_base_dir in ggsave paths", {
+  result <- suppressWarnings(
+    generate_gwas_meta_pipeline("CAD", trait_type = "binary",
+                                n_col = "EffectiveN", manifest_df = make_manifest_df(),
+                                hm3_path = "/nonexistent/w_hm3.snplist",
+                                dbsnp_path = "/nonexistent/dbSNP155",
+                                output_base_dir = "MyOutput")
+  )
+  expect_true(grepl("MyOutput", result))
+  expect_true(grepl('file.path("MyOutput"', result, fixed = TRUE))
+})
+
+test_that("custom manhattan dimensions appear in generated code", {
+  result <- suppressWarnings(
+    generate_gwas_meta_pipeline("CAD", trait_type = "binary",
+                                n_col = "EffectiveN", manifest_df = make_manifest_df(),
+                                hm3_path = "/nonexistent/w_hm3.snplist",
+                                dbsnp_path = "/nonexistent/dbSNP155",
+                                manhattan_width = 20, manhattan_height = 8)
+  )
+  expect_true(grepl("width = 20", result, fixed = TRUE))
+  expect_true(grepl("height = 8", result, fixed = TRUE))
+})
+
+test_that("default manhattan dimensions appear when not specified", {
+  result <- suppressWarnings(
+    generate_gwas_meta_pipeline("CAD", trait_type = "binary",
+                                n_col = "EffectiveN", manifest_df = make_manifest_df(),
+                                hm3_path = "/nonexistent/w_hm3.snplist",
+                                dbsnp_path = "/nonexistent/dbSNP155")
+  )
+  expect_true(grepl("width = 16", result, fixed = TRUE))
+  expect_true(grepl("height = 6", result, fixed = TRUE))
+})
+
+test_that("ALL population manhattan PDF target is present", {
+  result <- suppressWarnings(
+    generate_gwas_meta_pipeline("CAD", trait_type = "binary",
+                                n_col = "EffectiveN", manifest_df = make_manifest_df(),
+                                hm3_path = "/nonexistent/w_hm3.snplist",
+                                dbsnp_path = "/nonexistent/dbSNP155")
+  )
+  expect_true(grepl("meta_manhattan_pdf_ALL", result))
+  expect_true(grepl("manhattan_ALL.pdf", result))
+})
+
 test_that("no file-existence warning when all paths exist", {
   withr::with_tempdir({
     mdf <- make_manifest_df()
