@@ -4,8 +4,9 @@
 #' Generates quarto-compatible R code chunks as a character string for
 #' inclusion in multi-trait reports. Manhattan plots use
 #' `knitr::include_graphics()` with PDF file targets for fast rendering
-#' (displayed at full width via `out.width = "100%"`). Loci tables are
-#' rendered with `DT::datatable()` with CSV/Excel export buttons.
+#' (displayed at full width with aspect ratio preserved via `fig-width` /
+#' `fig-height` chunk options). Loci tables are rendered with
+#' `DT::datatable()` with a CSV export button.
 #' Precision plots and LDSC heatmaps use native `tar_read()` calls.
 #' Sections with per-ancestry results (LDSC heatmaps, Manhattan plots)
 #' are organized using Quarto tabset panels.
@@ -17,6 +18,14 @@
 #'   targets (only ancestries with 2+ cohorts).
 #' @param include_loci Logical; whether to include genome-wide significant
 #'   loci table chunks. Default `TRUE`.
+#' @param manhattan_width Width in inches used for the Manhattan plot PDF.
+#'   Must match the value passed to [generate_gwas_meta_pipeline()].
+#'   Used to set `fig-width` for proper PDF-to-image conversion.
+#'   Default `16`.
+#' @param manhattan_height Height in inches used for the Manhattan plot PDF.
+#'   Must match the value passed to [generate_gwas_meta_pipeline()].
+#'   Used to set `fig-height` for proper PDF-to-image conversion.
+#'   Default `6`.
 #'
 #' @return A length-1 character string containing quarto markdown with
 #'   embedded R code chunks.
@@ -39,7 +48,8 @@
 #' @importFrom glue glue glue_collapse
 #' @importFrom dplyr add_count filter distinct pull
 #' @export
-generate_report_chunks <- function(trait, manifest_df, include_loci = TRUE) {
+generate_report_chunks <- function(trait, manifest_df, include_loci = TRUE,
+                                   manhattan_width = 16, manhattan_height = 6) {
 
   # Validate trait
   if (missing(trait) || !is.character(trait) || length(trait) != 1 || !nzchar(trait)) {
@@ -109,7 +119,7 @@ targets::tar_read(<<trait_lower>>_ldsc_rg_qc_heatmap_<<anc>>)
 targets::tar_read(<<trait_lower>>_meta_loci_ALL) |>
   DT::datatable(extensions = "Buttons",
                 options = list(dom = "Bfrtip",
-                               buttons = c("csv", "excel"),
+                               buttons = c("csv"),
                                scrollX = TRUE))
 ```
 ', .open = "<<", .close = ">>")
@@ -120,6 +130,8 @@ targets::tar_read(<<trait_lower>>_meta_loci_ALL) |>
 
 ```{r}
 #| out-width: "100%"
+#| fig-width: <<manhattan_width>>
+#| fig-height: <<manhattan_height>>
 knitr::include_graphics(targets::tar_read(<<trait_lower>>_meta_manhattan_pdf_ALL))
 ```
 <<all_loci>>', .open = "<<", .close = ">>")
@@ -136,7 +148,7 @@ knitr::include_graphics(targets::tar_read(<<trait_lower>>_meta_manhattan_pdf_ALL
 targets::tar_read(<<trait_lower>>_meta_loci_<<anc>>) |>
   DT::datatable(extensions = "Buttons",
                 options = list(dom = "Bfrtip",
-                               buttons = c("csv", "excel"),
+                               buttons = c("csv"),
                                scrollX = TRUE))
 ```
 ', .open = "<<", .close = ">>")
@@ -146,6 +158,8 @@ targets::tar_read(<<trait_lower>>_meta_loci_<<anc>>) |>
 
 ```{r}
 #| out-width: "100%"
+#| fig-width: <<manhattan_width>>
+#| fig-height: <<manhattan_height>>
 knitr::include_graphics(targets::tar_read(<<trait_lower>>_meta_manhattan_pdf_<<anc>>))
 ```
 <<anc_loci>>', .open = "<<", .close = ">>")
