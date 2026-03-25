@@ -32,7 +32,7 @@ extract_loci(
 - df:
 
   A data frame of meta-analysis results (e.g. output of
-  [`meta_analyze_ivw()`](https://mglev1n.github.io/gwastargets/reference/meta_analyze_ivw.md)).
+  [`meta_analyze_ivw()`](http://www.levin-lab.org/gwastargets/reference/meta_analyze_ivw.md)).
 
 - snp_col:
 

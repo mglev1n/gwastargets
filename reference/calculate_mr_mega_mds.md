@@ -29,7 +29,7 @@ calculate_mr_mega_mds(
   A data frame (long format) with one row per variant × study
   combination. Must contain columns identified by `chr_col`, `pos_col`,
   `ea_col`, `oa_col`, `eaf_col`, and `file_col`. Typically the output of
-  [`extract_common_variants()`](https://mglev1n.github.io/gwastargets/reference/extract_common_variants.md).
+  [`extract_common_variants()`](http://www.levin-lab.org/gwastargets/reference/extract_common_variants.md).
 
 - pcCount:
 

@@ -34,7 +34,7 @@ meta_analyze_ivw(
 - parquet_files:
 
   Character vector of paths to prepared parquet files (output of
-  [`prep_gwas()`](https://mglev1n.github.io/gwastargets/reference/prep_gwas.md)).
+  [`prep_gwas()`](http://www.levin-lab.org/gwastargets/reference/prep_gwas.md)).
 
 - trait_type:
 

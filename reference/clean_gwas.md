@@ -1,7 +1,7 @@
 # Clean GWAS summary statistics with tidyGWAS
 
 Harmonises column headers via
-[`harmonize_sumstats_headers()`](https://mglev1n.github.io/gwastargets/reference/harmonize_sumstats_headers.md),
+[`harmonize_sumstats_headers()`](http://www.levin-lab.org/gwastargets/reference/harmonize_sumstats_headers.md),
 applies a minor-allele frequency pre-filter (EFF_ALL_FREQ between 0.001
 and 0.999), and passes the result through
 [`tidyGWAS::tidyGWAS()`](https://ararder.github.io/tidyGWAS/reference/tidyGWAS.html)
@@ -26,7 +26,7 @@ clean_gwas(sumstats_file, logging_path, column_map = NULL, ...)
 - column_map:
 
   Optional named character vector of per-cohort column renames passed to
-  [`harmonize_sumstats_headers()`](https://mglev1n.github.io/gwastargets/reference/harmonize_sumstats_headers.md).
+  [`harmonize_sumstats_headers()`](http://www.levin-lab.org/gwastargets/reference/harmonize_sumstats_headers.md).
   Default `NULL`.
 
 - ...:

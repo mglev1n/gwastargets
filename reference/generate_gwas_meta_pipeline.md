@@ -65,7 +65,7 @@ generate_gwas_meta_pipeline(
 - dbsnp_path:
 
   Path to the dbSNP155 reference directory passed to
-  [`prep_gwas()`](https://mglev1n.github.io/gwastargets/reference/prep_gwas.md).
+  [`prep_gwas()`](http://www.levin-lab.org/gwastargets/reference/prep_gwas.md).
   Required.
 
 - crew_controller:

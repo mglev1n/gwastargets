@@ -11,14 +11,14 @@ The typical workflow is:
 
 1.  Assemble a **manifest** data frame describing your cohort files
 2.  Call
-    [`generate_gwas_meta_pipeline()`](https://mglev1n.github.io/gwastargets/reference/generate_gwas_meta_pipeline.md)
+    [`generate_gwas_meta_pipeline()`](http://www.levin-lab.org/gwastargets/reference/generate_gwas_meta_pipeline.md)
     to produce `_targets.R` code
 3.  Paste the output into your `_targets.R` and run
     `targets::tar_make()`
 
 The pipeline functions
-([`prep_gwas()`](https://mglev1n.github.io/gwastargets/reference/prep_gwas.md),
-[`meta_analyze_ivw()`](https://mglev1n.github.io/gwastargets/reference/meta_analyze_ivw.md),
+([`prep_gwas()`](http://www.levin-lab.org/gwastargets/reference/prep_gwas.md),
+[`meta_analyze_ivw()`](http://www.levin-lab.org/gwastargets/reference/meta_analyze_ivw.md),
 etc.) are also available for interactive use outside of `targets`.
 
 ------------------------------------------------------------------------
@@ -30,7 +30,7 @@ Two reference files must be provided before generating a pipeline:
 ### HapMap 3 SNP list (`hm3_path`)
 
 Used by
-[`prep_gwas()`](https://mglev1n.github.io/gwastargets/reference/prep_gwas.md)
+[`prep_gwas()`](http://www.levin-lab.org/gwastargets/reference/prep_gwas.md)
 to match variants and by LDSC for heritability and genetic correlation
 estimation. The file is loaded via
 [`vroom::vroom()`](https://vroom.tidyverse.org/reference/vroom.html) and
@@ -41,7 +41,7 @@ repository](https://alkesgroup.broadinstitute.org/LDSCORE/).
 ### dbSNP155 reference (`dbsnp_path`)
 
 Used by
-[`clean_gwas()`](https://mglev1n.github.io/gwastargets/reference/clean_gwas.md)
+[`clean_gwas()`](http://www.levin-lab.org/gwastargets/reference/clean_gwas.md)
 (via `tidyGWAS`) for variant QC and rsID harmonization. This should be
 the path to a local dbSNP155 directory. See the [`tidyGWAS`
 documentation](https://github.com/Ararder/tidyGWAS) for instructions on
@@ -79,7 +79,7 @@ manifest <- data.frame(
 )
 ```
 
-[`generate_gwas_meta_pipeline()`](https://mglev1n.github.io/gwastargets/reference/generate_gwas_meta_pipeline.md)
+[`generate_gwas_meta_pipeline()`](http://www.levin-lab.org/gwastargets/reference/generate_gwas_meta_pipeline.md)
 validates the manifest before generating any code — it will error if
 required columns are missing or `study` values are duplicated, and warn
 if any `path` files do not exist on disk.
@@ -121,16 +121,16 @@ The output is a self-contained block of R code ready to paste into
 ## Step 3: Per-cohort preparation (`prep_gwas`)
 
 Each cohort’s summary statistics pass through
-[`prep_gwas()`](https://mglev1n.github.io/gwastargets/reference/prep_gwas.md),
+[`prep_gwas()`](http://www.levin-lab.org/gwastargets/reference/prep_gwas.md),
 which:
 
 1.  **Cleans** the raw file via
-    [`clean_gwas()`](https://mglev1n.github.io/gwastargets/reference/clean_gwas.md)
+    [`clean_gwas()`](http://www.levin-lab.org/gwastargets/reference/clean_gwas.md)
     (header harmonization + `tidyGWAS` QC)
 2.  **Validates** that the expected columns are present for the declared
     `trait_type`
 3.  **Matches** variants to the HapMap 3 SNP list via
-    [`snp_match_munge()`](https://mglev1n.github.io/gwastargets/reference/snp_match_munge.md)
+    [`snp_match_munge()`](http://www.levin-lab.org/gwastargets/reference/snp_match_munge.md)
 4.  **Estimates** the LDSC intercept and applies SE correction when
     intercept \> 1
 5.  **Writes** a `.parquet` file with standardized columns including
@@ -182,7 +182,7 @@ pipeline.
 
 ## Step 5: IVW meta-analysis
 
-[`meta_analyze_ivw()`](https://mglev1n.github.io/gwastargets/reference/meta_analyze_ivw.md)
+[`meta_analyze_ivw()`](http://www.levin-lab.org/gwastargets/reference/meta_analyze_ivw.md)
 runs a fixed-effects inverse-variance weighted meta-analysis across all
 prepped parquet files, one chromosome at a time:
 
@@ -222,9 +222,9 @@ and columns for lead variant, gene, and association statistics.
 
 For multi-ancestry analyses, MR-MEGA requires a matrix of per-study
 effect estimates at common variants.
-[`extract_common_variants()`](https://mglev1n.github.io/gwastargets/reference/extract_common_variants.md)
+[`extract_common_variants()`](http://www.levin-lab.org/gwastargets/reference/extract_common_variants.md)
 identifies variants present in all studies above a MAF threshold, and
-[`calculate_mr_mega_mds()`](https://mglev1n.github.io/gwastargets/reference/calculate_mr_mega_mds.md)
+[`calculate_mr_mega_mds()`](http://www.levin-lab.org/gwastargets/reference/calculate_mr_mega_mds.md)
 computes MDS coordinates from the resulting effect heterogeneity matrix:
 
 ``` r
@@ -246,11 +246,11 @@ ancestry-driven effect heterogeneity.
 
 ## Raw summary statistics format
 
-[`prep_gwas()`](https://mglev1n.github.io/gwastargets/reference/prep_gwas.md)
+[`prep_gwas()`](http://www.levin-lab.org/gwastargets/reference/prep_gwas.md)
 accepts a wide range of column naming conventions.
-[`harmonize_sumstats_headers()`](https://mglev1n.github.io/gwastargets/reference/harmonize_sumstats_headers.md)
+[`harmonize_sumstats_headers()`](http://www.levin-lab.org/gwastargets/reference/harmonize_sumstats_headers.md)
 (called internally by
-[`clean_gwas()`](https://mglev1n.github.io/gwastargets/reference/clean_gwas.md))
+[`clean_gwas()`](http://www.levin-lab.org/gwastargets/reference/clean_gwas.md))
 maps common aliases to the standard names used throughout this package:
 
 | Standard name | Common aliases accepted                |
@@ -264,4 +264,4 @@ maps common aliases to the standard names used throughout this package:
 | `ControlN`    | `N_CONTROL`, `Ncontrols`               |
 
 Additional mappings can be passed via the `column_names` argument to
-[`prep_gwas()`](https://mglev1n.github.io/gwastargets/reference/prep_gwas.md).
+[`prep_gwas()`](http://www.levin-lab.org/gwastargets/reference/prep_gwas.md).

@@ -48,16 +48,16 @@ cat(code)
 as a standalone exported function for interactive use or integration
 into existing workflows:
 
-| Function                                                                                                        | Purpose                                                               |
-|-----------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------|
-| [`prep_gwas()`](https://mglev1n.github.io/gwastargets/reference/prep_gwas.md)                                   | Clean, harmonize, and LDSC-correct one cohort’s summary statistics    |
-| [`summarize_sumstats()`](https://mglev1n.github.io/gwastargets/reference/summarize_sumstats.md)                 | Per-cohort QC summary (N, MAF range, median SE, precision)            |
-| [`meta_analyze_ivw()`](https://mglev1n.github.io/gwastargets/reference/meta_analyze_ivw.md)                     | Fixed-effects IVW meta-analysis across cohorts                        |
-| [`extract_loci()`](https://mglev1n.github.io/gwastargets/reference/extract_loci.md)                             | Clump significant variants into independent loci with gene annotation |
-| [`extract_common_variants()`](https://mglev1n.github.io/gwastargets/reference/extract_common_variants.md)       | Identify variants present across all studies (for MR-MEGA)            |
-| [`calculate_mr_mega_mds()`](https://mglev1n.github.io/gwastargets/reference/calculate_mr_mega_mds.md)           | Compute MR-MEGA MDS coordinates from cross-cohort effect estimates    |
-| [`snp_match_munge()`](https://mglev1n.github.io/gwastargets/reference/snp_match_munge.md)                       | Match summary statistics to a reference panel and munge for LDSC      |
-| [`harmonize_sumstats_headers()`](https://mglev1n.github.io/gwastargets/reference/harmonize_sumstats_headers.md) | Standardize column names across GWAS file formats                     |
+| Function                                                                                                       | Purpose                                                               |
+|----------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------|
+| [`prep_gwas()`](http://www.levin-lab.org/gwastargets/reference/prep_gwas.md)                                   | Clean, harmonize, and LDSC-correct one cohort’s summary statistics    |
+| [`summarize_sumstats()`](http://www.levin-lab.org/gwastargets/reference/summarize_sumstats.md)                 | Per-cohort QC summary (N, MAF range, median SE, precision)            |
+| [`meta_analyze_ivw()`](http://www.levin-lab.org/gwastargets/reference/meta_analyze_ivw.md)                     | Fixed-effects IVW meta-analysis across cohorts                        |
+| [`extract_loci()`](http://www.levin-lab.org/gwastargets/reference/extract_loci.md)                             | Clump significant variants into independent loci with gene annotation |
+| [`extract_common_variants()`](http://www.levin-lab.org/gwastargets/reference/extract_common_variants.md)       | Identify variants present across all studies (for MR-MEGA)            |
+| [`calculate_mr_mega_mds()`](http://www.levin-lab.org/gwastargets/reference/calculate_mr_mega_mds.md)           | Compute MR-MEGA MDS coordinates from cross-cohort effect estimates    |
+| [`snp_match_munge()`](http://www.levin-lab.org/gwastargets/reference/snp_match_munge.md)                       | Match summary statistics to a reference panel and munge for LDSC      |
+| [`harmonize_sumstats_headers()`](http://www.levin-lab.org/gwastargets/reference/harmonize_sumstats_headers.md) | Standardize column names across GWAS file formats                     |
 
 ## Pipeline Architecture
 
@@ -80,7 +80,7 @@ into existing workflows:
 
 ## Manifest requirements
 
-[`generate_gwas_meta_pipeline()`](https://mglev1n.github.io/gwastargets/reference/generate_gwas_meta_pipeline.md)
+[`generate_gwas_meta_pipeline()`](http://www.levin-lab.org/gwastargets/reference/generate_gwas_meta_pipeline.md)
 validates the manifest before generating any code. The required columns
 are:
 

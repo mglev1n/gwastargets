@@ -7,7 +7,7 @@ the cohort-specific raw column name (a string) to override the default
 mapping, or leave as `NA` to skip.
 
 The returned vector is suitable for the `column_map` argument of
-[`harmonize_sumstats_headers()`](https://mglev1n.github.io/gwastargets/reference/harmonize_sumstats_headers.md).
+[`harmonize_sumstats_headers()`](http://www.levin-lab.org/gwastargets/reference/harmonize_sumstats_headers.md).
 
 ## Usage
 

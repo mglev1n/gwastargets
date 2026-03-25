@@ -2,10 +2,10 @@
 
 A high-level wrapper that runs the full per-cohort preparation pipeline:
 (1) cleans the raw file via
-[`clean_gwas()`](https://mglev1n.github.io/gwastargets/reference/clean_gwas.md),
+[`clean_gwas()`](http://www.levin-lab.org/gwastargets/reference/clean_gwas.md),
 (2) validates trait-type columns via `assert_trait_columns()`, (3)
 matches to HapMap3 SNPs via
-[`snp_match_munge()`](https://mglev1n.github.io/gwastargets/reference/snp_match_munge.md),
+[`snp_match_munge()`](http://www.levin-lab.org/gwastargets/reference/snp_match_munge.md),
 (4) estimates the LDSC intercept via
 [`ldscr::ldsc_h2()`](https://mglev1n.github.io/ldscr/reference/ldsc_h2.html),
 and (5) writes an `.parquet` file with LDSC-adjusted (or unadjusted) SE,
@@ -68,15 +68,15 @@ prep_gwas(
 
   Optional named character vector of per-cohort column renames passed
   through to
-  [`clean_gwas()`](https://mglev1n.github.io/gwastargets/reference/clean_gwas.md)
+  [`clean_gwas()`](http://www.levin-lab.org/gwastargets/reference/clean_gwas.md)
   and ultimately to
-  [`harmonize_sumstats_headers()`](https://mglev1n.github.io/gwastargets/reference/harmonize_sumstats_headers.md).
+  [`harmonize_sumstats_headers()`](http://www.levin-lab.org/gwastargets/reference/harmonize_sumstats_headers.md).
   Default `NULL`.
 
 - ...:
 
   Additional arguments forwarded to
-  [`clean_gwas()`](https://mglev1n.github.io/gwastargets/reference/clean_gwas.md).
+  [`clean_gwas()`](http://www.levin-lab.org/gwastargets/reference/clean_gwas.md).
 
 ## Value
 

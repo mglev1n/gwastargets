@@ -24,7 +24,7 @@ harmonize_sumstats_headers(input_file, column_map = NULL)
   are source column names in the file; values are target harmonised
   names. Applied **before** the built-in dictionary so that user
   overrides take priority. Use
-  [`build_column_map()`](https://mglev1n.github.io/gwastargets/reference/build_column_map.md)
+  [`build_column_map()`](http://www.levin-lab.org/gwastargets/reference/build_column_map.md)
   to construct this vector from manifest `col_*` values. Default `NULL`
   (no custom mapping).
 

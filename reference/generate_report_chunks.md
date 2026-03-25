@@ -31,7 +31,7 @@ generate_report_chunks(
 
   A data frame with at least `ancestry` and `cohort` columns. Same
   manifest passed to
-  [`generate_gwas_meta_pipeline()`](https://mglev1n.github.io/gwastargets/reference/generate_gwas_meta_pipeline.md).
+  [`generate_gwas_meta_pipeline()`](http://www.levin-lab.org/gwastargets/reference/generate_gwas_meta_pipeline.md).
   Used to determine which ancestries have per-ancestry meta-analysis
   targets (only ancestries with 2+ cohorts).
 
