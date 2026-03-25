@@ -79,6 +79,36 @@ manifest <- data.frame(
 )
 ```
 
+### Optional column-mapping columns
+
+When a cohort’s raw summary statistics use non-standard column headers
+that are not covered by the built-in dictionary (see [Raw summary
+statistics format](#raw-summary-statistics-format) below), you can add
+`col_*` columns to the manifest. Each `col_*` value is the raw column
+name in that cohort’s file; use `NA` for cohorts that don’t need an
+override.
+
+Supported `col_*` columns: `col_chr`, `col_pos`, `col_rsid`,
+`col_effect_allele`, `col_other_allele`, `col_beta`, `col_se`, `col_p`,
+`col_eaf`, `col_n`, `col_n_cases`, `col_n_controls`. See
+[`?build_column_map`](http://www.levin-lab.org/gwastargets/reference/build_column_map.md)
+for details on what each maps to.
+
+``` r
+manifest <- data.frame(
+  path     = c("/project/data/UKBB_EUR.txt.gz",
+               "/project/data/MVP_EUR.txt.gz"),
+  file     = c("UKBB_EUR.txt.gz", "MVP_EUR.txt.gz"),
+  cohort   = c("UKBB",            "MVP"),
+  ancestry = c("EUR",             "EUR"),
+  study    = c("UKBB_EUR",        "MVP_EUR"),
+  # UKBB uses non-standard names; MVP uses standard names
+  col_eaf  = c("MY_FREQ",         NA),
+  col_beta = c("BETA_VAL",        NA),
+  stringsAsFactors = FALSE
+)
+```
+
 [`generate_gwas_meta_pipeline()`](http://www.levin-lab.org/gwastargets/reference/generate_gwas_meta_pipeline.md)
 validates the manifest before generating any code — it will error if
 required columns are missing or `study` values are duplicated, and warn
@@ -263,5 +293,9 @@ maps common aliases to the standard names used throughout this package:
 | `CaseN`       | `N_CASE`, `Ncases`                     |
 | `ControlN`    | `N_CONTROL`, `Ncontrols`               |
 
-Additional mappings can be passed via the `column_names` argument to
+When using
+[`generate_gwas_meta_pipeline()`](http://www.levin-lab.org/gwastargets/reference/generate_gwas_meta_pipeline.md),
+additional mappings are handled automatically via `col_*` columns in the
+manifest (see \[Step 1\] above). For interactive use, pass a named
+character vector to the `column_map` argument of
 [`prep_gwas()`](http://www.levin-lab.org/gwastargets/reference/prep_gwas.md).

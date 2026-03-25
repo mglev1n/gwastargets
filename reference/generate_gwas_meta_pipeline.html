@@ -21,7 +21,7 @@ call in the generated output so the pipeline is self-contained."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">gwastargets</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -102,7 +102,13 @@ must contain no spaces or special characters; does not need to include the
 ancestry). A <code>tar_name</code> column (<code>{study}_{ancestry}</code>) is automatically
 added and used as the <code>tar_map</code> target name so that ancestry-based target
 selectors work reliably. Additional columns are preserved in the serialized
-output.</p></dd>
+output.</p>
+<p>Optionally, the manifest may include <code>col_*</code> columns to map non-standard
+column names in each cohort's raw file to harmonized names. These are
+passed to <code><a href="build_column_map.html">build_column_map()</a></code> during per-cohort preparation. Supported
+columns: <code>col_chr</code>, <code>col_pos</code>, <code>col_rsid</code>, <code>col_effect_allele</code>,
+<code>col_other_allele</code>, <code>col_beta</code>, <code>col_se</code>, <code>col_p</code>, <code>col_eaf</code>, <code>col_n</code>,
+<code>col_n_cases</code>, <code>col_n_controls</code>. See <code><a href="build_column_map.html">build_column_map()</a></code> for details.</p></dd>
 
 
 <dt id="arg-hm-path">hm3_path<a class="anchor" aria-label="anchor" href="#arg-hm-path"></a></dt>
@@ -168,6 +174,9 @@ returned visibly.</p></dd>
 <span class="r-in"><span>  cohort   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"UKBB"</span>,                  <span class="st">"MVP"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  ancestry <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"EUR"</span>,                   <span class="st">"AFR"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  study    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"UKBB_EUR"</span>,              <span class="st">"MVP_AFR"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  <span class="co"># Optional: map non-standard column names per cohort</span></span></span>
+<span class="r-in"><span>  col_eaf  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"MY_FREQ"</span>,              <span class="cn">NA</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  col_beta <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"BETA_VAL"</span>,             <span class="cn">NA</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu">generate_gwas_meta_pipeline</span><span class="op">(</span><span class="st">"CAD"</span>, trait_type <span class="op">=</span> <span class="st">"binary"</span>,</span></span>

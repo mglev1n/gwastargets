@@ -57,6 +57,17 @@ generate_gwas_meta_pipeline(
   selectors work reliably. Additional columns are preserved in the
   serialized output.
 
+  Optionally, the manifest may include `col_*` columns to map
+  non-standard column names in each cohort's raw file to harmonized
+  names. These are passed to
+  [`build_column_map()`](http://www.levin-lab.org/gwastargets/reference/build_column_map.md)
+  during per-cohort preparation. Supported columns: `col_chr`,
+  `col_pos`, `col_rsid`, `col_effect_allele`, `col_other_allele`,
+  `col_beta`, `col_se`, `col_p`, `col_eaf`, `col_n`, `col_n_cases`,
+  `col_n_controls`. See
+  [`build_column_map()`](http://www.levin-lab.org/gwastargets/reference/build_column_map.md)
+  for details.
+
 - hm3_path:
 
   Path to the LDSC HapMap3 SNP list file (e.g. `w_hm3.snplist`).
@@ -117,6 +128,9 @@ manifest <- data.frame(
   cohort   = c("UKBB",                  "MVP"),
   ancestry = c("EUR",                   "AFR"),
   study    = c("UKBB_EUR",              "MVP_AFR"),
+  # Optional: map non-standard column names per cohort
+  col_eaf  = c("MY_FREQ",              NA),
+  col_beta = c("BETA_VAL",             NA),
   stringsAsFactors = FALSE
 )
 cat(generate_gwas_meta_pipeline("CAD", trait_type = "binary",

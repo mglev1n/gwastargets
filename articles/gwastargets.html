@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gwastargets</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -160,16 +160,45 @@ combination. It must contain five columns:</p>
 <span>  study    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"UKBB_EUR"</span>,        <span class="st">"MVP_EUR"</span>,        <span class="st">"BBJ_EAS"</span><span class="op">)</span>,</span>
 <span>  stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
+<div class="section level3">
+<h3 id="optional-column-mapping-columns">Optional column-mapping columns<a class="anchor" aria-label="anchor" href="#optional-column-mapping-columns"></a>
+</h3>
+<p>When a cohort’s raw summary statistics use non-standard column
+headers that are not covered by the built-in dictionary (see <a href="#raw-summary-statistics-format">Raw summary statistics format</a>
+below), you can add <code>col_*</code> columns to the manifest. Each
+<code>col_*</code> value is the raw column name in that cohort’s file;
+use <code>NA</code> for cohorts that don’t need an override.</p>
+<p>Supported <code>col_*</code> columns: <code>col_chr</code>,
+<code>col_pos</code>, <code>col_rsid</code>,
+<code>col_effect_allele</code>, <code>col_other_allele</code>,
+<code>col_beta</code>, <code>col_se</code>, <code>col_p</code>,
+<code>col_eaf</code>, <code>col_n</code>, <code>col_n_cases</code>,
+<code>col_n_controls</code>. See <code><a href="../reference/build_column_map.html">?build_column_map</a></code> for
+details on what each maps to.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">manifest</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  path     <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"/project/data/UKBB_EUR.txt.gz"</span>,</span>
+<span>               <span class="st">"/project/data/MVP_EUR.txt.gz"</span><span class="op">)</span>,</span>
+<span>  file     <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"UKBB_EUR.txt.gz"</span>, <span class="st">"MVP_EUR.txt.gz"</span><span class="op">)</span>,</span>
+<span>  cohort   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"UKBB"</span>,            <span class="st">"MVP"</span><span class="op">)</span>,</span>
+<span>  ancestry <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"EUR"</span>,             <span class="st">"EUR"</span><span class="op">)</span>,</span>
+<span>  study    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"UKBB_EUR"</span>,        <span class="st">"MVP_EUR"</span><span class="op">)</span>,</span>
+<span>  <span class="co"># UKBB uses non-standard names; MVP uses standard names</span></span>
+<span>  col_eaf  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"MY_FREQ"</span>,         <span class="cn">NA</span><span class="op">)</span>,</span>
+<span>  col_beta <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"BETA_VAL"</span>,        <span class="cn">NA</span><span class="op">)</span>,</span>
+<span>  stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <p><code><a href="../reference/generate_gwas_meta_pipeline.html">generate_gwas_meta_pipeline()</a></code> validates the manifest
 before generating any code — it will error if required columns are
 missing or <code>study</code> values are duplicated, and warn if any
 <code>path</code> files do not exist on disk.</p>
 <hr>
 </div>
+</div>
 <div class="section level2">
 <h2 id="step-2-generate-the-pipeline">Step 2: Generate the pipeline<a class="anchor" aria-label="anchor" href="#step-2-generate-the-pipeline"></a>
 </h2>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">code</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/generate_gwas_meta_pipeline.html">generate_gwas_meta_pipeline</a></span><span class="op">(</span></span>
 <span>  trait       <span class="op">=</span> <span class="st">"CAD"</span>,</span>
 <span>  trait_type  <span class="op">=</span> <span class="st">"binary"</span>,      <span class="co"># or "quantitative"</span></span>
@@ -222,7 +251,7 @@ correction when intercept &gt; 1</li>
 standardized columns including <code>SE_ldsc_adjusted</code>
 </li>
 </ol>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Typically called inside a targets pipeline, but works interactively too</span></span>
 <span><span class="va">out_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/prep_gwas.html">prep_gwas</a></span><span class="op">(</span></span>
 <span>  sumstats_file <span class="op">=</span> <span class="st">"/project/data/UKBB_EUR.txt.gz"</span>,</span>
@@ -278,7 +307,7 @@ plus:</p>
 <h2 id="step-4-cohort-qc-with-summarize_sumstats">Step 4: Cohort QC with <code>summarize_sumstats</code><a class="anchor" aria-label="anchor" href="#step-4-cohort-qc-with-summarize_sumstats"></a>
 </h2>
 <p>Before meta-analysis, inspect per-cohort statistics:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">prepped_files</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="st">"Data/CAD/prepped_sumstats"</span>, full.names <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>                            pattern <span class="op">=</span> <span class="st">"\\.parquet$"</span><span class="op">)</span></span>
 <span></span>
@@ -297,7 +326,7 @@ pipeline.</p>
 <p><code><a href="../reference/meta_analyze_ivw.html">meta_analyze_ivw()</a></code> runs a fixed-effects inverse-variance
 weighted meta-analysis across all prepped parquet files, one chromosome
 at a time:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">meta_results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/meta_analyze_ivw.html">meta_analyze_ivw</a></span><span class="op">(</span></span>
 <span>  parquet_files <span class="op">=</span> <span class="va">prepped_files</span>,</span>
 <span>  trait_type    <span class="op">=</span> <span class="st">"binary"</span>,</span>
@@ -316,7 +345,7 @@ plus heterogeneity statistics <code>Q</code>, <code>Q_df</code>,
 <div class="section level2">
 <h2 id="step-6-loci-extraction">Step 6: Loci extraction<a class="anchor" aria-label="anchor" href="#step-6-loci-extraction"></a>
 </h2>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">loci</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extract_loci.html">extract_loci</a></span><span class="op">(</span><span class="va">meta_results</span><span class="op">)</span></span></code></pre></div>
 <p>Calls <code><a href="https://lcpilling.github.io/gwasRtools/reference/get_loci.html" class="external-link">gwasRtools::get_loci()</a></code> for LD-based clumping and
 <code><a href="https://lcpilling.github.io/gwasRtools/reference/get_nearest_gene.html" class="external-link">gwasRtools::get_nearest_gene()</a></code> for gene annotation. Returns
@@ -333,7 +362,7 @@ effect estimates at common variants.
 all studies above a MAF threshold, and
 <code><a href="../reference/calculate_mr_mega_mds.html">calculate_mr_mega_mds()</a></code> computes MDS coordinates from the
 resulting effect heterogeneity matrix:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">common_vars</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extract_common_variants.html">extract_common_variants</a></span><span class="op">(</span></span>
 <span>  parquet_files        <span class="op">=</span> <span class="va">prepped_files</span>,</span>
 <span>  trait_type           <span class="op">=</span> <span class="st">"binary"</span>,</span>
@@ -406,8 +435,11 @@ standard names used throughout this package:</p>
 </tr>
 </tbody>
 </table>
-<p>Additional mappings can be passed via the <code>column_names</code>
-argument to <code><a href="../reference/prep_gwas.html">prep_gwas()</a></code>.</p>
+<p>When using <code><a href="../reference/generate_gwas_meta_pipeline.html">generate_gwas_meta_pipeline()</a></code>, additional
+mappings are handled automatically via <code>col_*</code> columns in the
+manifest (see [Step 1] above). For interactive use, pass a named
+character vector to the <code>column_map</code> argument of
+<code><a href="../reference/prep_gwas.html">prep_gwas()</a></code>.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
