@@ -28,6 +28,13 @@
 #'   added and used as the `tar_map` target name so that ancestry-based target
 #'   selectors work reliably. Additional columns are preserved in the serialized
 #'   output.
+#'
+#'   Optionally, the manifest may include `col_*` columns to map non-standard
+#'   column names in each cohort's raw file to harmonized names. These are
+#'   passed to [build_column_map()] during per-cohort preparation. Supported
+#'   columns: `col_chr`, `col_pos`, `col_rsid`, `col_effect_allele`,
+#'   `col_other_allele`, `col_beta`, `col_se`, `col_p`, `col_eaf`, `col_n`,
+#'   `col_n_cases`, `col_n_controls`. See [build_column_map()] for details.
 #' @param hm3_path Path to the LDSC HapMap3 SNP list file (e.g.
 #'   `w_hm3.snplist`). Required.
 #' @param dbsnp_path Path to the dbSNP155 reference directory passed to
@@ -60,6 +67,9 @@
 #'   cohort   = c("UKBB",                  "MVP"),
 #'   ancestry = c("EUR",                   "AFR"),
 #'   study    = c("UKBB_EUR",              "MVP_AFR"),
+#'   # Optional: map non-standard column names per cohort
+#'   col_eaf  = c("MY_FREQ",              NA),
+#'   col_beta = c("BETA_VAL",             NA),
 #'   stringsAsFactors = FALSE
 #' )
 #' cat(generate_gwas_meta_pipeline("CAD", trait_type = "binary",

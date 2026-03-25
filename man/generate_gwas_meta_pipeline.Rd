@@ -35,7 +35,14 @@ must contain no spaces or special characters; does not need to include the
 ancestry). A \code{tar_name} column (\verb{\{study\}_\{ancestry\}}) is automatically
 added and used as the \code{tar_map} target name so that ancestry-based target
 selectors work reliably. Additional columns are preserved in the serialized
-output.}
+output.
+
+Optionally, the manifest may include \verb{col_*} columns to map non-standard
+column names in each cohort's raw file to harmonized names. These are
+passed to \code{\link[=build_column_map]{build_column_map()}} during per-cohort preparation. Supported
+columns: \code{col_chr}, \code{col_pos}, \code{col_rsid}, \code{col_effect_allele},
+\code{col_other_allele}, \code{col_beta}, \code{col_se}, \code{col_p}, \code{col_eaf}, \code{col_n},
+\code{col_n_cases}, \code{col_n_controls}. See \code{\link[=build_column_map]{build_column_map()}} for details.}
 
 \item{hm3_path}{Path to the LDSC HapMap3 SNP list file (e.g.
 \code{w_hm3.snplist}). Required.}
@@ -90,6 +97,9 @@ manifest <- data.frame(
   cohort   = c("UKBB",                  "MVP"),
   ancestry = c("EUR",                   "AFR"),
   study    = c("UKBB_EUR",              "MVP_AFR"),
+  # Optional: map non-standard column names per cohort
+  col_eaf  = c("MY_FREQ",              NA),
+  col_beta = c("BETA_VAL",             NA),
   stringsAsFactors = FALSE
 )
 cat(generate_gwas_meta_pipeline("CAD", trait_type = "binary",
