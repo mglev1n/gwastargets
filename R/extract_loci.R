@@ -131,13 +131,22 @@ extract_loci <- function(df,
   }
 
   cli::cli_progress_step("Annotating with nearest genes (build {.val {build}})")
+  variant_id_col <- "__variant_id__"
+  df_loci[[variant_id_col]] <- paste(
+    df_loci[[chr_col_str]],
+    df_loci[[pos_col_str]],
+    df_loci[["EffectAllele"]],
+    df_loci[["OtherAllele"]],
+    sep = "_"
+  )
   result <- df_loci |>
     gwasRtools::get_nearest_gene(
-      snp_col = snp_col_str,
+      snp_col = variant_id_col,
       chr_col = chr_col_str,
       pos_col = pos_col_str,
       build   = build
     )
+  result[[variant_id_col]] <- NULL
 
   cli::cli_alert_success("Analysis complete: {.val {nrow(result)}} loci with gene annotations")
   return(tibble::as_tibble(result))
